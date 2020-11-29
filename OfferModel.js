@@ -11,7 +11,7 @@ Offer.init({
     company: { type: DataTypes.STRING, },
     function: { type: DataTypes.STRING, },
     details: { type: DataTypes.TEXT, },
-    desc: {type: DataTypes.TEXT, allowNull : true }
+    //desc: {type: DataTypes.TEXT, allowNull : true }
     }, {
     sequelize,
     timestamps: true,
