@@ -199,8 +199,43 @@ async function scrapNexter() {
     });
 };
 
+async function scrapFnacDarty() {
+    const page_url = 'https://recrutement.fnacdarty.com/offre-de-emploi/liste-offres.aspx?page=1&LCID=1036&mode=list'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
 
-prompt.start();
+    $('li.ts-offer-list-item').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3').children('a').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://recrutement.fnacdarty.com" + $element.find($('a')).attr('href'));
+        offers.company = "Fnac Darty";
+        offers.function = "N/A";
+        offers.details = $element.find('ul.ts-offer-list-item__description').map((i, el) => {
+            return $(el).text();
+          }).get().join('').replace(/\s\s+/g, ' ').trim();
+
+        console.log(offers);
+        console.log("Fnac Darty : " + i);
+        //idx.isIdUnique(offers)
+        //    .then(isUnique => {
+        //        if (!isUnique) {
+        //            console.log('Not Added : Already exists in database');
+        //            ;
+        //        }
+        //        else {
+        //            idx.createOffer(offers);
+        //        }
+        //    })
+        //    .catch(error => {
+        //        console.error(error);
+        //    });
+    });
+};
+
+scrapFnacDarty();
+
+/*prompt.start();
 prompt.get(['site_to_scrap'], function (err, result) {
     if (err) { return onErr(err); }
     else if (result.site_to_scrap.toLowerCase() == "richemont") {
@@ -258,7 +293,7 @@ function onErr(err) {
     console.log(err);
     return 1;
 }
-
+*/
 
 
 /*

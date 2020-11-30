@@ -25,7 +25,7 @@ async function scrapRichemont() {
         offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
         offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
 
-        console.log(offers);
+        console.log("Richemont : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                 if (!isUnique) {
@@ -57,7 +57,7 @@ async function scrapDassaultAviation() {
         offers.function = "N/A";
         offers.details = "";
 
-        console.log(offers);
+        console.log("Dassault Aviation : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                 if (!isUnique) {
@@ -83,11 +83,11 @@ async function scrapAirFrance() {
         const $element = $(element);
         const offers = {};
         offers.name = $element.find('h3').find('a').text().replace(/\s\s+/g, ' ').trim();
-        offers.link = ("https://recrutement.airfrance.com/offre-de-emploi/liste-offres.aspx" + $element.find($('a')).attr('href'));
+        offers.link = ("https://recrutement.airfrance.com" + $element.find($('a')).attr('href'));
         offers.company = "Air France";
-        offers.function = "";
+        offers.function = "N/A";
         offers.details = $element.find('ul.ts-offer-list-item__description').map((i, el) => {
-            return $(el + " ").text();
+            return $(el).text().trim();
           }).get().join('');
 
         //console.log(offers);
@@ -106,7 +106,6 @@ async function scrapAirFrance() {
                 console.error(error);
             });
     });
-    console.log("Total Air France : " + i)
 };
 
 async function scrapSanofi() {
@@ -123,7 +122,7 @@ async function scrapSanofi() {
         offers.function = "";
         offers.details = $element.children('a').find('.job-location').text();
 
-        console.log(offers);
+        console.log("Sanofi : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                 if (!isUnique) {
@@ -192,7 +191,7 @@ async function scrapFramatome() {
             return $(el).text();
           }).get().join(' ');
 
-        console.log(offers);
+        console.log("Framatome : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                 if (!isUnique) {
@@ -225,7 +224,7 @@ async function scrapEngie() {
             return $(el).text().replace(/\s\s+/g, ' ').trim();
           }).get().join(' ');
 
-        console.log(offers);
+        console.log("Engie : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                 if (!isUnique) {
@@ -256,7 +255,7 @@ async function scrapAlstom() {
         offers.function = $element.find($('span.jobDepartment')).text();
         offers.details = ($element.find('span.jobLocation').text().replace(/\s\s+/g, ' ').trim() + $element.find('span.jobShifttype').text().replace(/\s\s+/g, ' ').trim() + $element.find('span.jobDate').text().replace(/\s\s+/g, ' ').trim());
 
-        console.log(offers);
+        console.log("Alstom : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                 if (!isUnique) {
@@ -289,7 +288,7 @@ async function scrapNexter() {
             return $(el).text();
           }).get().join(' /*/ ');
 
-        console.log(offers);
+        console.log("Nexter : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                     if (!isUnique) {
@@ -304,8 +303,6 @@ async function scrapNexter() {
 
     });
 };
-
-
 
 async function scrapSafran() {
     const page_url = 'https://www.safran-group.com/jobs';
@@ -323,7 +320,7 @@ async function scrapSafran() {
             return $(el).text();
           }).get().join(' /*/ '));
 
-        console.log(offers);
+        console.log("Safran : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                     if (!isUnique) {
@@ -339,19 +336,93 @@ async function scrapSafran() {
     });
 };
 
+async function scrapFnacDarty() {
+    const page_url = 'https://recrutement.fnacdarty.com/offre-de-emploi/liste-offres.aspx?page=1&LCID=1036&mode=list'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3').find('a').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://recrutement.fnacdarty.com" + $element.find($('a')).attr('href'));
+        offers.company = "Fnac Darty";
+        offers.function = "N/A";
+        offers.details = $element.find('ul.ts-offer-list-item__description').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
+
+        //console.log(offers);
+        console.log("Fnac Darty : " + i)
+        idx.isIdUnique(offers)
+            .then(isUnique => {
+                if (!isUnique) {
+                    console.log('Not Added : Already exists in database');
+                    ;
+                }
+                else {
+                    idx.createOffer(offers);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+};
+
+async function scrapThales() {
+    const page_url = 'https://emploi.thalesgroup.com/recherche-d%27offres'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3').find('a').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://emploi.thalesgroup.com/" + $element.find($('a')).attr('href'));
+        offers.company = "Fnac Darty";
+        offers.function = "N/A";
+        offers.details = $element.find('ul.ts-offer-list-item__description').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
+
+        //console.log(offers);
+        console.log("Fnac Darty : " + i)
+        idx.isIdUnique(offers)
+            .then(isUnique => {
+                if (!isUnique) {
+                    console.log('Not Added : Already exists in database');
+                    ;
+                }
+                else {
+                    idx.createOffer(offers);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+};
+
 
 //idx.resetDatabase();
+function scrapAll() {
+    scrapRichemont();
+    scrapDassaultAviation();
+    scrapAirFrance();
+    scrapEngie();
+    scrapFramatome();
+    scrapHermes();
+    scrapSanofi();
+    scrapAlstom();
+    scrapNexter();
+    scrapSafran();
+    scrapFnacDarty();
+    scrapThales();
+};
 
-scrapRichemont();
-scrapDassaultAviation();
-scrapAirFrance();
-scrapEngie();
-scrapFramatome();
-scrapHermes();
-scrapSanofi();
-scrapAlstom();
-scrapNexter();
-scrapSafran();
+
+module.exports = {scrapAll};
 
 
 /*
@@ -424,13 +495,13 @@ async function scrapDaher() {
 */
 
 /*
+https://career2.successfactors.eu/career?company=esa&career%5fns=job%5flisting%5fsummary&navBarLevel=JOB%5fSEARCH&_s.crb=UdpZXzwfYS%2fNyvBo1UyYWY88Gpi1ny5OFMIIpJk6Ih0%3d
 https://www.airliquide.com/fr/carrieres/offres-emploi #not working yet
 https://cc.wd3.myworkdayjobs.com/fr-FR/ChanelCareers
 https://jobs.danone.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_country=FR&optionsFacetsDD_facility=&optionsFacetsDD_department=Experienced+professionals
 https://careers.3ds.com/jobs?woc=%7B%22country%22%3A%5B%22country%2Ffrance%22%5D%7D&wocset=6
 http://careers.disneylandparis.com/en/management-business/supply-chain-procurement
 https://www.edf.fr/edf-recrute
-https://recrutement.fnacdarty.com/accueil.aspx?LCID=1036
 https://www.place-emploi-public.gouv.fr
 https://jobs.gecareers.com/global/en/search-results
 https://www.invivo-group.com/fr/nos-offres
@@ -447,12 +518,10 @@ https://orange.jobs/jobs/search.do?keyword=
 https://pernodricard.wd3.myworkdayjobs.com/fr-FR/pernod-ricard
 https://jobs.groupe-psa.com/offre-de-emploi/liste-offres.aspx?mode=layer&lcid=1036&facet_JobDescription_Contract=577
 https://renault.referrals.selectminds.com/
-
 https://joinus.saint-gobain.com/fr
 https://www.sodern.com/website/fr/ref/Carrières_262.html
 https://hris-suez.csod.com/ats/careersite/search.aspx?site=8&c=hris-suez&sid=%5e%5e%5eHJe5gko1mldbDMyZ8oI9Lw%3d%3d
 https://careers.hr.technipfmc.com
-https://emploi.thalesgroup.com/recherche-d%27offres
 https://krb-sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=30080&siteid=6559#home
 https://career012.successfactors.eu/career?company=VALLOUREC&site=VjItcmY2YVFFcnJMYWhIb3RmMzhTYU9Ldz09
 https://emplois.vinci.com/recherche-d%27offres
