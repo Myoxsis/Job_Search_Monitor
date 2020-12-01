@@ -37,6 +37,27 @@ function isIdUnique (x) {
     });
 }
 
+function add_to_db(x) {
+    isIdUnique(x)
+        .then(isUnique => {
+            if (!isUnique) {
+                console.log('Not Added : Already exists in database');
+            }
+            else {
+                if (x.name.toLowerCase().search(/(stage|alternance|stagiaire|apprenti|apprentissage)/g) > -1){
+                    console.log("Not Added : Stage or Alternance");
+                }
+               else { 
+                    createOffer(x);
+                    console.log("Added to db");
+                }
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
 function resetDatabase() {
     Offer.sync({ force: true })
 }
@@ -44,4 +65,4 @@ function resetDatabase() {
 // the defined model is the class itself
 console.log(Offer === sequelize.models.offer);
 
-module.exports = { createOffer, isIdUnique, resetDatabase };
+module.exports = { createOffer, isIdUnique, resetDatabase, add_to_db };

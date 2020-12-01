@@ -24,26 +24,7 @@ async function scrapRichemont() {
         offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
 
         console.log("Richemont : " + i);
-        //idx.isIdUnique(offers)
-        //    .then(isUnique => {
-        //        if (!isUnique) {
-        //            console.log('Not Added : Already exists in database');
-        //        }
-        //        else {
-        //            if (offers.name.toLowerCase().search(stage|alternance) == true){ console.log("Stage or Alternance");}
-        //            else { console.log("Added to db")}
-        //            //idx.createOffer(offers);
-        //        }
-        //    })
-        //    .catch(error => {
-        //        console.error(error);
-        //    });
-        if (offers.name.toLowerCase().search(/(stage|alternance)/g) > -1){
-             console.log("Stage or Alternance");
-        }
-        else { 
-            console.log("Added to db");
-        }
+        idx.add_to_db(offers);
         });
         
 };

@@ -9,45 +9,25 @@ Add Sodern scrap not working yet // Smartrecruiters
 
 Working :
 Alstom : ok
-
-
-
  */
 
-async function scrapRichemont() { 
-    var page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=Fixed+Term&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
-    var { data } = await axios.get(page_url);
-    var $ = cheerio.load(data);
+async function scrapRichemont() {
+    const page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
 
     $('#searchresults tbody tr').each((i, element) => {
-        var $element = $(element);
-        var offers = {};
+        const $element = $(element);
+        const offers = {};
         offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
         offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
         offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
         offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
         offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
 
-        console.log("Richemont CDD : " + i);
-        console.log(offers);
-    });
-
-    var page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=Permanent&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
-    var { data } = await axios.get(page_url);
-    var $ = cheerio.load(data);
-
-    $('#searchresults tbody tr').each((i, element) => {
-        var $element = $(element);
-        var offers = {};
-        offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
-        offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
-        offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
-        offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
-        offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
-
-        console.log("Richemont CDI : " + i);
-        console.log(offers);
-        });
+        console.log("Richemont : " + i);
+        idx.add_to_db(offers);
+        }); 
 };
 
 async function scrapDassaultAviation() {
@@ -65,19 +45,7 @@ async function scrapDassaultAviation() {
         offers.details = "";
 
         console.log("Dassault Aviation : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -99,19 +67,7 @@ async function scrapAirFrance() {
 
         //console.log(offers);
         console.log("Air France : " + i)
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -130,19 +86,7 @@ async function scrapSanofi() {
         offers.details = $element.children('a').find('.job-location').text();
 
         console.log("Sanofi : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
     
 };
@@ -166,19 +110,7 @@ async function scrapHermes() {
 
         //console.log(offers);
         console.log("Hermes : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -199,19 +131,7 @@ async function scrapFramatome() {
           }).get().join(' ');
 
         console.log("Framatome : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -232,19 +152,7 @@ async function scrapEngie() {
           }).get().join(' ');
 
         console.log("Engie : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -263,19 +171,7 @@ async function scrapAlstom() {
         offers.details = ($element.find('span.jobLocation').text().replace(/\s\s+/g, ' ').trim() + $element.find('span.jobShifttype').text().replace(/\s\s+/g, ' ').trim() + $element.find('span.jobDate').text().replace(/\s\s+/g, ' ').trim());
 
         console.log("Alstom : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -296,17 +192,7 @@ async function scrapNexter() {
           }).get().join(' /*/ ');
 
         console.log("Nexter : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                    if (!isUnique) {
-                        console.log('Not Added : Already exists in database');
-                    }else {
-                        idx.createOffer(offers);
-                    }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
 
     });
 };
@@ -328,18 +214,7 @@ async function scrapSafran() {
           }).get().join(' /*/ '));
 
         console.log("Safran : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                    if (!isUnique) {
-                        console.log('Not Added : Already exists in database');
-                    }else {
-                        idx.createOffer(offers);
-                    }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
+        idx.add_to_db(offers);
     });
 };
 
@@ -361,19 +236,7 @@ async function scrapFnacDarty() {
 
         //console.log(offers);
         console.log("Fnac Darty : " + i)
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -395,19 +258,7 @@ async function scrapThales() {
 
         //console.log(offers);
         console.log("Fnac Darty : " + i)
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -429,19 +280,7 @@ async function scrapMBDA() {
 
         //console.log(offers);
         console.log("MBDA : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -463,19 +302,7 @@ async function scrapLOREAL() {
 
         //console.log(offers);
         console.log("L'Oreal : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -495,19 +322,7 @@ async function scrapEDF() {
 
         //console.log(offers);
         console.log("EDF : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -527,19 +342,7 @@ async function scrapLVMH() {
 
         //console.log(offers);
         console.log("LVMH : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -561,19 +364,7 @@ async function scrapMotul() {
          
         //console.log(offers);
         console.log("Motul : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
@@ -594,19 +385,7 @@ async function scrapSaintGobain() {
          
         console.log(offers);
         console.log("Saint Gobain : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        idx.add_to_db(offers);
     });
 };
 
