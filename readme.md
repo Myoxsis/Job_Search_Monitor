@@ -16,3 +16,7 @@
         [] If hot&skilled, electron app
     [] Add notification system
 
+## Notes
+    - For Richemont done : CDI & CDD
+    - For Dassault Aviation : Not Possible, cannot target filters in link
+    

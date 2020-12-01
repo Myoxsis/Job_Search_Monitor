@@ -1,7 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const { colors } = require("prompt");
-//const prompt = require("prompt");
+const idx = require("./OfferModel");
 
 /*
     - Daher not working / Complex hierarchy and automated page
@@ -9,40 +9,43 @@ const { colors } = require("prompt");
 
 // Add Engie Scrap // Not working yet
 
-async function scrapRichemont() { 
-    var page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=Fixed+Term&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
-    var { data } = await axios.get(page_url);
-    var $ = cheerio.load(data);
+async function scrapRichemont() {
+    const page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
 
     $('#searchresults tbody tr').each((i, element) => {
-        var $element = $(element);
-        var offers = {};
+        const $element = $(element);
+        const offers = {};
         offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
         offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
         offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
         offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
         offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
 
-        console.log("Richemont CDD : " + i);
-        console.log(offers);
-    });
-
-    var page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=Permanent&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
-    var { data } = await axios.get(page_url);
-    var $ = cheerio.load(data);
-
-    $('#searchresults tbody tr').each((i, element) => {
-        var $element = $(element);
-        var offers = {};
-        offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
-        offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
-        offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
-        offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
-        offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
-
-        console.log("Richemont CDI : " + i);
-        console.log(offers);
+        console.log("Richemont : " + i);
+        //idx.isIdUnique(offers)
+        //    .then(isUnique => {
+        //        if (!isUnique) {
+        //            console.log('Not Added : Already exists in database');
+        //        }
+        //        else {
+        //            if (offers.name.toLowerCase().search(stage|alternance) == true){ console.log("Stage or Alternance");}
+        //            else { console.log("Added to db")}
+        //            //idx.createOffer(offers);
+        //        }
+        //    })
+        //    .catch(error => {
+        //        console.error(error);
+        //    });
+        if (offers.name.toLowerCase().search(/(stage|alternance)/g) > -1){
+             console.log("Stage or Alternance");
+        }
+        else { 
+            console.log("Added to db");
+        }
         });
+        
 };
 
 scrapRichemont();
