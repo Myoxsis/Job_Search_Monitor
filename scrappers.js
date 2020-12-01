@@ -5,42 +5,49 @@ const idx = require("./OfferModel");
 /* 
 Add ArianeGroup Scrap // Not Working yet (Workday)
 Add Daher Scrap // Worrkday so not working yet
+Add Sodern scrap not working yet // Smartrecruiters
 
 Working :
 Alstom : ok
 
+
+
  */
 
-async function scrapRichemont() {
-    const page_url = 'https://jobs.richemont.com/search/?q=&sortColumn=referencedate&sortDirection=desc&optionsFacetsDD_country=FR&startrow=1'
-    const { data } = await axios.get(page_url);
-    const $ = cheerio.load(data);
+async function scrapRichemont() { 
+    var page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=Fixed+Term&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
+    var { data } = await axios.get(page_url);
+    var $ = cheerio.load(data);
 
     $('#searchresults tbody tr').each((i, element) => {
-        const $element = $(element);
-        const offers = {};
+        var $element = $(element);
+        var offers = {};
         offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
         offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
         offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
         offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
         offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
 
-        console.log("Richemont : " + i);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                if (!isUnique) {
-                    console.log('Not Added : Already exists in database');
-                    ;
-                }
-                else {
-                    idx.createOffer(offers);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-        
+        console.log("Richemont CDD : " + i);
+        console.log(offers);
     });
+
+    var page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=Permanent&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
+    var { data } = await axios.get(page_url);
+    var $ = cheerio.load(data);
+
+    $('#searchresults tbody tr').each((i, element) => {
+        var $element = $(element);
+        var offers = {};
+        offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
+        offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
+        offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
+        offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
+
+        console.log("Richemont CDI : " + i);
+        console.log(offers);
+        });
 };
 
 async function scrapDassaultAviation() {
@@ -404,78 +411,24 @@ async function scrapThales() {
     });
 };
 
-
-//idx.resetDatabase();
-function scrapAll() {
-    scrapRichemont();
-    scrapDassaultAviation();
-    scrapAirFrance();
-    scrapEngie();
-    scrapFramatome();
-    scrapHermes();
-    scrapSanofi();
-    scrapAlstom();
-    scrapNexter();
-    scrapSafran();
-    scrapFnacDarty();
-    scrapThales();
-};
-
-
-module.exports = {scrapAll};
-
-
-/*
-
-    - To be reworked because not working
-
-
-async function scrapArianeGroup() {
-    const page_url = 'https://arianegroup.wd3.myworkdayjobs.com/EXTERNALALL';
+async function scrapMBDA() {
+    const page_url = 'https://www.mbda-systems.com/jobs/?gestmax%5Bvac_sector%5D=&gestmax%5Bvac_localisation%5D=001&gestmax%5Bvac_job_type%5D='
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
 
-    $('li.WE2F.WMQO.WK5.WL3F').each((i, element) => {
+    $('table tbody tr').each((i, element) => {
         const $element = $(element);
         const offers = {};
-        offers.name = $element.find($('div.gwt-Label.WKDP.WDCP')).text().replace(/\s\s+/g, ' ').trim();
-        offers.link = "";
-        offers.company = "ArianeGroup";
+        offers.name = $element.find('th').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = $element.find($('a')).attr('href');
+        offers.company = "MBDA";
         offers.function = "N/A";
-        offers.details = $element.find('span.gwt-InlineLabel.WI3F.WH2F');
+        offers.details = $element.find('td').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
 
-        console.log(offers);
-        idx.isIdUnique(offers)
-            .then(isUnique => {
-                    if (!isUnique) {
-                        console.log('Not Added : Already exists in database');
-                    }else {
-                        idx.createOffer(offers);
-                    }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
-    });
-};
-
-async function scrapDaher() {
-    // To be reviewed, nothing is extrated
-    const page_url = 'https://wd3.myworkdaysite.com/recruiting/daher/Daher'
-    const { data } = await axios.get(page_url);
-    const $ = cheerio.load(data);
-
-    $('#promptOption-gwt-uid-1').each((i, element) => {
-        const $element = $(element);
-        const offers = {};
-        offers.name = $element.find('.gwt-Label WKDP WDCP');
-        offers.link = "";
-    //    offers.company = "Daher";
-    //    offers.function = TBD;
-    //    offers.details = TBD;
-
-        console.log($element);
+        //console.log(offers);
+        console.log("MBDA : " + i);
         idx.isIdUnique(offers)
             .then(isUnique => {
                 if (!isUnique) {
@@ -492,7 +445,196 @@ async function scrapDaher() {
     });
 };
 
-*/
+async function scrapLOREAL() {
+    const page_url = 'https://careers.loreal.com/en_US/jobs/SearchJobs/?3_110_3=18022&3_33_3=134,133'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('article.article--result').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3.article__header__text__title').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = $element.find($('a')).attr('href');
+        offers.company = "L'Oreal";
+        offers.function = "N/A";
+        offers.details = $element.find('div.article__header__text__subtitle').find('span').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
+
+        //console.log(offers);
+        console.log("L'Oreal : " + i);
+        idx.isIdUnique(offers)
+            .then(isUnique => {
+                if (!isUnique) {
+                    console.log('Not Added : Already exists in database');
+                    ;
+                }
+                else {
+                    idx.createOffer(offers);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+};
+
+async function scrapEDF() {
+    const page_url = 'https://www.edf.fr/edf-recrute/rejoignez-nous/voir-les-offres/nos-offres?search%5Blocation%5D=_TS_CO_Country_France&search%5BcurrentPath%5D=page_entity/345&search%5Bdiplome%5D=123'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('div.wrapper-offer').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3.offer-title').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://www.edf.fr" + $element.find($('a')).attr('href'));
+        offers.company = "EDF";
+        offers.function = "N/A";
+        offers.details = ($element.find('div.offer-date').text() + ' /*/ ' + $element.find('li.offer-type').text() + " /*/ " + $element.find('li.offer-state').text());
+
+        //console.log(offers);
+        console.log("EDF : " + i);
+        idx.isIdUnique(offers)
+            .then(isUnique => {
+                if (!isUnique) {
+                    console.log('Not Added : Already exists in database');
+                    ;
+                }
+                else {
+                    idx.createOffer(offers);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+};
+
+async function scrapLVMH() {
+    const page_url = 'https://www.lvmh.fr/talents/nous-rejoindre/nos-offres/liste-des-offres/?job=&place=&experience=&activity=&contract=&reference=#gt_offers-results'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('table tbody tr').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = $element.find('h3').parent('a').attr('href');
+        offers.company = "LVMH";
+        offers.function = "N/A";
+        offers.details = ($element.find('td.detail__h').text() + " /*/ " + $element.find('td.detail__h').prev('td').text());
+
+        //console.log(offers);
+        console.log("LVMH : " + i);
+        idx.isIdUnique(offers)
+            .then(isUnique => {
+                if (!isUnique) {
+                    console.log('Not Added : Already exists in database');
+                    ;
+                }
+                else {
+                    idx.createOffer(offers);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+};
+
+async function scrapMotul() {
+    const page_url = 'https://motul-recrute.talent-soft.com/job/list-of-jobs.aspx?mode=list'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://motul-recrute.talent-soft.com" + $element.find('h3').find('a').attr('href'));
+        offers.company = "Motul";
+        offers.function = "N/A";
+        offers.details = $element.find('ul.ts-offer-list-item__description').find('li').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
+         
+        //console.log(offers);
+        console.log("Motul : " + i);
+        idx.isIdUnique(offers)
+            .then(isUnique => {
+                if (!isUnique) {
+                    console.log('Not Added : Already exists in database');
+                    ;
+                }
+                else {
+                    idx.createOffer(offers);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+};
+
+async function scrapSaintGobain() {
+    const page_url = 'https://joinus.saint-gobain.com/fr?country=FR&region[]=106&region[]=361&region[]=421&type[]=38&type[]=41&function[]=63&function[]=57&function[]=64&search='
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('div.views-row').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('span.field.field--name-title.field--type-string.field--label-hidden').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://joinus.saint-gobain.com" + $element.find('a').attr('href'));
+        offers.company = "Saint Gobain";
+        offers.function = "N/A";
+        offers.details = ($element.find('span.ref').text().replace(/\s\s+/g, ' ').trim() + " /*/ "
+         + $element.find('div.field__item').text().replace(/\s\s+/g, ' ').trim());
+         
+        console.log(offers);
+        console.log("Saint Gobain : " + i);
+        idx.isIdUnique(offers)
+            .then(isUnique => {
+                if (!isUnique) {
+                    console.log('Not Added : Already exists in database');
+                    ;
+                }
+                else {
+                    idx.createOffer(offers);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+};
+
+
+//idx.resetDatabase();
+function scrapAll() {
+    scrapRichemont();
+    scrapDassaultAviation();
+    scrapAirFrance();
+    scrapEngie();
+    scrapFramatome();
+    scrapHermes();
+    scrapSanofi();
+    scrapAlstom();
+    scrapNexter();
+    scrapSafran();
+    scrapFnacDarty();
+    scrapThales();
+    scrapMBDA();
+    scrapLOREAL();
+    scrapEDF();
+    scrapLVMH();
+    scrapMotul();
+    scrapSaintGobain();
+};
+
+
+module.exports = {scrapAll};
 
 /*
 https://career2.successfactors.eu/career?company=esa&career%5fns=job%5flisting%5fsummary&navBarLevel=JOB%5fSEARCH&_s.crb=UdpZXzwfYS%2fNyvBo1UyYWY88Gpi1ny5OFMIIpJk6Ih0%3d
