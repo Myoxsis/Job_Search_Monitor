@@ -9,27 +9,30 @@ const idx = require("./OfferModel");
 
 // Add Engie Scrap // Not working yet
 
-async function scrapRichemont() {
-    const page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
+async function scrapSMCP() {
+    const page_url = 'https://www.smcp.com/fr/talents/offres-d-emploi/?keywords=&geographicalLocation=22&offerCountry=79&offerRegion=&organisation=&offerFamilyCategory=&contractType=&experienceLevel='
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
 
-    $('#searchresults tbody tr').each((i, element) => {
+    $('ul.ts-related-offers__row').find('li').each((i, element) => {
         const $element = $(element);
         const offers = {};
-        offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
-        offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
-        offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
-        offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
-        offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
+        offers.name = $element.find('h3.ts-offer-list-item__title.styleh3').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://careers.ratpdev.com" + $element.find('a.ts-offer-list-item__title-link').attr('href'));
+        offers.company = "RATP Dev";
+        offers.function = $element.find('div.col-10.col-sm:nth-child(2)').text().replace(/\s\s+/g, ' ').trim();
+        offers.details = $element.find('ul.ts-offer-list-item__description').find('li').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
 
-        console.log("Richemont : " + i);
-        idx.add_to_db(offers);
-        });
-        
+        if (offers.name !== '') {
+            console.log(offers);
+            console.log("RATP Dev : " + i);
+        }
+    });
 };
 
-scrapRichemont();
+scrapSMCP();
 
 /*
 https://www.airliquide.com/fr/carrieres/offres-emploi #not working yet
@@ -41,13 +44,9 @@ https://www.place-emploi-public.gouv.fr
 https://jobs.gecareers.com/global/en/search-results
 https://www.invivo-group.com/fr/nos-offres
 https://kering.wd3.myworkdayjobs.com/fr-FR/Kering?source=LinkedIn_Slots
-https://careers.loreal.com/en_US/jobs/SearchJobs/
-https://www.lisi-aerospace.com/en/join-us/careers/
 https://jobs.moncler.com/search/?createNewAlert=false&q=&locationsearch=
-https://www.naval-group.com/fr/nous-rejoindre-85?keywords=&offerFamilyCategory=&contractType=&country=&city=&op=Rechercher&form_build_id=form-NzrJ7AsvKwvEKPwLDA2P5Qu6e3T6EKUpkTDoHGZS6Is&form_id=talent_soft_offers_filters_form#offer-list-content
 https://orange.jobs/jobs/search.do?keyword=
 https://pernodricard.wd3.myworkdayjobs.com/fr-FR/pernod-ricard
-https://jobs.groupe-psa.com/offre-de-emploi/liste-offres.aspx?mode=layer&lcid=1036&facet_JobDescription_Contract=577
 https://renault.referrals.selectminds.com/
 https://hris-suez.csod.com/ats/careersite/search.aspx?site=8&c=hris-suez&sid=%5e%5e%5eHJe5gko1mldbDMyZ8oI9Lw%3d%3d
 https://careers.hr.technipfmc.com
@@ -55,12 +54,12 @@ https://krb-sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=30080&siteid=
 https://career012.successfactors.eu/career?company=VALLOUREC&site=VjItcmY2YVFFcnJMYWhIb3RmMzhTYU9Ldz09
 https://emplois.vinci.com/recherche-d%27offres
 https://www.nestle.fr/jobs/search-jobs?keyword=&country=FR&location=&career_area=All&company=All
-https://www.smcp.com/fr/talents/offres-d-emploi/?keywords=&geographicalLocation=22&offerCountry=79&offerRegion=&organisation=&offerFamilyCategory=&contractType=&experienceLevel=
 https://pfizer.wd1.myworkdayjobs.com/PfizerCareers/5/refreshFacet/318c8bb6f553100021d223d9780d30be
 https://careers.faurecia.com/search/?createNewAlert=false&q=&locationsearch=france&optionsFacetsDD_customfield3=&optionsFacetsDD_country=&optionsFacetsDD_shifttype=Unlimited
 https://www.emploi.sncf.com/nos-offres/contrat/577-578/localisation/40629/
-https://careers.ratpdev.com/offre-de-emploi/liste-offres.aspx?page=3&LCID=1036
 https://arianegroup.wd3.myworkdayjobs.com/EXTERNALALL
+
+https://jobs.groupe-psa.com/offre-de-emploi/liste-offres.aspx?mode=layer&lcid=1036&facet_JobDescription_Contract=577
 */
 
 

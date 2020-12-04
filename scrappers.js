@@ -240,28 +240,6 @@ async function scrapFnacDarty() {
     });
 };
 
-async function scrapThales() {
-    const page_url = 'https://emploi.thalesgroup.com/recherche-d%27offres'
-    const { data } = await axios.get(page_url);
-    const $ = cheerio.load(data);
-
-    $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
-        const $element = $(element);
-        const offers = {};
-        offers.name = $element.find('h3').find('a').text().replace(/\s\s+/g, ' ').trim();
-        offers.link = ("https://emploi.thalesgroup.com/" + $element.find($('a')).attr('href'));
-        offers.company = "Fnac Darty";
-        offers.function = "N/A";
-        offers.details = $element.find('ul.ts-offer-list-item__description').map((i, el) => {
-            return $(el).text();
-          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
-
-        //console.log(offers);
-        console.log("Fnac Darty : " + i)
-        idx.add_to_db(offers);
-    });
-};
-
 async function scrapMBDA() {
     const page_url = 'https://www.mbda-systems.com/jobs/?gestmax%5Bvac_sector%5D=&gestmax%5Bvac_localisation%5D=001&gestmax%5Bvac_job_type%5D='
     const { data } = await axios.get(page_url);
@@ -389,6 +367,94 @@ async function scrapSaintGobain() {
     });
 };
 
+async function scrapThales() {
+    const page_url = 'https://emploi.thalesgroup.com/recherche-d%27offres'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('section#applied-filters').next('ul').find('li').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h2').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://emploi.thalesgroup.com" + $element.find($('a')).attr('href'));
+        offers.company = "Thales";
+        offers.function = "N/A";
+        offers.details = ($element.find('span.job-date-posted').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('span.job-location').text().replace(/\s\s+/g, ' ').trim());
+
+        //console.log(offers);
+        console.log("Thales : " + i);
+        idx.add_to_db(offers);
+    });
+};
+
+async function scrapNavalGroup() {
+    const page_url = 'https://www.naval-group.com/fr/nous-rejoindre-85?keywords=&offerFamilyCategory=&contractType=&country=79&city=&op=Rechercher&form_build_id=form-fIocKsmgflhM_Us7HcDb-_tjAsrVbZc13Sasq2el-sk&form_id=talent_soft_offers_filters_form&page=0'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('ul.list-type-a').find('li').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3.job-offer-item-title.title-h3').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://www.naval-group.com" + $element.find($('a')).attr('href'));
+        offers.company = "Naval Group";
+        offers.function = $element.find('p.job-offer-item-category').text().replace(/\s\s+/g, ' ').trim();
+        offers.details = ($element.find('p.job-offer-item-category').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('ul.job-offer-item-info').text().replace(/\s\s+/g, ' ').trim());
+
+        if (offers.name !== '') {
+            //console.log(offers);
+            console.log("Naval Group : " + i);
+            idx.add_to_db(offers);
+        }
+    });
+};
+
+async function scrapLisiAerospace() {
+    const page_url = 'https://www.lisi-aerospace.com/en/join-us/careers/'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('div.row.no-gutters.table-stripped-body').find('a').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('div.col-10.col-sm:nth-child(5)').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = $element.attr('href');
+        offers.company = "Lisi Aerospace";
+        offers.function = $element.find('div.col-10.col-sm:nth-child(2)').text().replace(/\s\s+/g, ' ').trim();
+        offers.details = ($element.find('div.col-10.col-sm:nth-child(1)').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('div.col-10.col-sm:nth-child(2)').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('div.col-10.col-sm:nth-child(3)').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('div.col-10.col-sm:nth-child(6)').text().replace(/\s\s+/g, ' ').trim() + ", " + $element.find('div.col-10.col-sm:nth-child(7)').text().replace(/\s\s+/g, ' ').trim());
+
+        if (offers.name !== '') {
+            //console.log(offers);
+            console.log("Lisi Aerospace : " + i);
+            idx.add_to_db(offers);
+        }
+    });
+};
+
+async function scrapRATPdev() {
+    const page_url = 'https://careers.ratpdev.com/offre-de-emploi/liste-offres.aspx?page=1&LCID=1036'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+
+    $('ul.ts-related-offers__row').find('li').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3.ts-offer-list-item__title.styleh3').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://careers.ratpdev.com" + $element.find('a.ts-offer-list-item__title-link').attr('href'));
+        offers.company = "RATP Dev";
+        offers.function = $element.find('div.col-10.col-sm:nth-child(2)').text().replace(/\s\s+/g, ' ').trim();
+        offers.details = $element.find('ul.ts-offer-list-item__description').find('li').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
+
+        if (offers.name !== '') {
+            //console.log(offers);
+            console.log("RATP Dev : " + i);
+            idx.add_to_db(offers);
+        }
+    });
+};
+
 
 //idx.resetDatabase();
 function scrapAll() {
@@ -410,6 +476,9 @@ function scrapAll() {
     scrapLVMH();
     scrapMotul();
     scrapSaintGobain();
+    scrapNavalGroup();
+    scrapLisiAerospace();
+    scrapRATPdev();
 };
 
 
