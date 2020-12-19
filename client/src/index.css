@@ -1,5 +1,5 @@
 body {
-  margin: 0;
+  margin: 50;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -7,7 +7,65 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.divOffer {
+  align-items: center;
+}
+
+.offerBox {
+  display: inline-block;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px;
+  width: calc(30% - 10px);
+  height: 80px;
+  background-color: aliceblue;
+}
+
+.offerItem {
+  display: flex;
+  /*justify-content: center;*/
+  position: relative;
+}
+
+.offerName {
+  color: #4a4a4a;
+}
+
+.offerCompany {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /*flex-shrink: 0;*/
+}
+
+.offerCompanyImg img{
+  display: flex;
+  padding: 10px;
+  width: 80px;
+}
+
+.offerCompanyItem {
+  display: flex;
+}
+
+.offerLink {
+  color: #4a4a4a;
+}
+
+.buttonContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+button {
+  background-color: aliceblue; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
 }

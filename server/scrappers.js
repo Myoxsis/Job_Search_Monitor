@@ -165,7 +165,7 @@ async function scrapAlstom() {
         const $element = $(element);
         const offers = {};
         offers.name = $element.find($('a.jobTitle-link')).text().replace(/\s\s+/g, ' ').trim();
-        offers.link = $element.find($('a.jobTitle-link')).attr('href');
+        offers.link = ("https://jobsearch.alstom.com" + $element.find($('a.jobTitle-link')).attr('href'));
         offers.company = "Alstom";
         offers.function = $element.find($('span.jobDepartment')).text();
         offers.details = ($element.find('span.jobLocation').text().replace(/\s\s+/g, ' ').trim() + $element.find('span.jobShifttype').text().replace(/\s\s+/g, ' ').trim() + $element.find('span.jobDate').text().replace(/\s\s+/g, ' ').trim());
@@ -456,7 +456,7 @@ async function scrapRATPdev() {
 };
 
 
-//idx.resetDatabase();
+idx.resetDatabase();
 function scrapAll() {
     scrapRichemont();
     scrapDassaultAviation();

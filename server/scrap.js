@@ -9,30 +9,38 @@ const idx = require("./OfferModel");
 
 // Add Engie Scrap // Not working yet
 
-async function scrapArianeGroup() {
-    const page_url = 'https://arianegroup.wd3.myworkdayjobs.com/EXTERNALALL'
+async function scrapRichemont() {
+    const page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
 
-    $('ul').find($('li.WE2F.WMQO.WK5.WL3F')).each((i, element) => {
+    $('#searchresults tbody tr').each((i, element) => {
         const $element = $(element);
         const offers = {};
-        offers.name = $element.find('div.gwt-Label').text().replace(/\s\s+/g, ' ').trim();
-        offers.link = "Check on Workday Website";
-        offers.company = "ArianeGroup";
-        //offers.function = $element.find('div.col-10.col-sm:nth-child(2)').text().replace(/\s\s+/g, ' ').trim();
-        offers.details = $element.find('span.gwt-InlineLabel.WI3F.WH2F');
+        offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
+        offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
+        offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
+        offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
 
-        if (offers.name !== '') {
-            console.log(offers);
-            console.log("ArianeGroup : " + i);
-        }
-    });
+
+        const { data1 } = axios.get(offers.link);
+        const html = cheerio.load(data1);
+
+        offers.desc = html('.job').text();
+
+        console.log("Richemont : " + i);
+        console.log(offers);
+        //idx.add_to_db(offers);
+    }); 
+
+    
 };
 
-scrapArianeGroup();
+scrapRichemont();
 
 /*
+Arianegroup
 https://www.airliquide.com/fr/carrieres/offres-emploi #not working yet
 https://cc.wd3.myworkdayjobs.com/fr-FR/ChanelCareers
 https://jobs.danone.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_country=FR&optionsFacetsDD_facility=&optionsFacetsDD_department=Experienced+professionals
