@@ -5,39 +5,63 @@ const idx = require("./OfferModel");
 
 /*
     - Daher not working / Complex hierarchy and automated page
+    - Add Engie Scrap // Not working yet
 */
 
-// Add Engie Scrap // Not working yet
+async function scrapMotul() {
+    const page_url = 'https://motul-recrute.talent-soft.com/job/list-of-jobs.aspx?mode=list'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+    var list_offers = [];
 
-async function scrapRichemont() {
-    const page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
+    $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find('h3').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://motul-recrute.talent-soft.com" + $element.find('h3').find('a').attr('href'));
+        offers.company = "Motul";
+        offers.function = "N/A";
+        offers.details = $element.find('ul.ts-offer-list-item__description').find('li').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
+         
+        list_offers.push(offers);
+    });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("Motul : " + i);
+        //idx.add_to_db(list_offers[i]);
+        console.log(list_offers[i]);
+    }
+};
+
+async function scrapSaintGobain() {
+    const page_url = 'https://joinus.saint-gobain.com/fr?country=FR&region[]=106&region[]=361&region[]=421&type[]=38&type[]=41&function[]=63&function[]=57&function[]=64&search='
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
 
-    $('#searchresults tbody tr').each((i, element) => {
+    $('div.views-row').each((i, element) => {
         const $element = $(element);
         const offers = {};
-        offers.name = $element.find($('.jobTitle')).text().replace(/\s\s+/g, ' ').trim();
-        offers.link = ("https://jobs.richemont.com" + $element.find($('.jobTitle')).find('a').attr('href'));
-        offers.company = $element.find($('.colFacility')).text().replace(/\s\s+/g, ' ').trim();
-        offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
-        offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
-
-
-        const { data1 } = axios.get(offers.link);
-        const html = cheerio.load(data1);
-
-        offers.desc = html('.job').text();
-
-        console.log("Richemont : " + i);
+        offers.name = $element.find('span.field.field--name-title.field--type-string.field--label-hidden').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://joinus.saint-gobain.com" + $element.find('a').attr('href'));
+        offers.company = "Saint Gobain";
+        offers.function = "N/A";
+        offers.details = ($element.find('span.ref').text().replace(/\s\s+/g, ' ').trim() + " /*/ "
+         + $element.find('div.field__item').text().replace(/\s\s+/g, ' ').trim());
+         
         console.log(offers);
-        //idx.add_to_db(offers);
-    }); 
-
-    
+        console.log("Saint Gobain : " + i);
+        idx.add_to_db(offers);
+    });
 };
 
-scrapRichemont();
+scrapMotul();
 
 /*
 Arianegroup

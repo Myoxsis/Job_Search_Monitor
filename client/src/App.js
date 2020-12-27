@@ -109,7 +109,7 @@ const App = () => {
                 </div>
                 <div className="offerDescription">
                   <div className="offerName">{description} </div>
-                  <div className="offerLink"><a href={entry.link}>Lien</a></div>
+                  <div className="offerLink"><a href={entry.link} target="_blank">Lien</a></div>
                 </div>
                 <div className="buttonContainer">
                   <button className="xButton">✔️</button>

@@ -15,6 +15,7 @@ async function scrapRichemont() {
     const page_url = 'https://jobs.richemont.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_facility=&optionsFacetsDD_country=FR&optionsFacetsDD_department=&optionsFacetsDD_shifttype=&optionsFacetsDD_customfield5=&optionsFacetsDD_customfield4='
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('#searchresults tbody tr').each((i, element) => {
         const $element = $(element);
@@ -25,15 +26,26 @@ async function scrapRichemont() {
         offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
         offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
 
+        list_offers.push(offers);
+    });
+
+    for (var i = 0; i < list_offers.length; i++) {
+        const { data } = await axios.get(list_offers[i].link);
+        const html = cheerio.load(data);
+
+        list_offers[i].desc = html('.job').text().replace(/\s\s+/g, ' ').trim();
+
         console.log("Richemont : " + i);
-        idx.add_to_db(offers);
-        }); 
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapDassaultAviation() {
     const page_url = 'https://carriere.dassault-aviation.com/offre-de-emploi/liste-offres.aspx?page=1&LCID=1036'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('li.ts-offer-list-item').each((i, element) => {
         const $element = $(element);
@@ -44,15 +56,27 @@ async function scrapDassaultAviation() {
         offers.function = "N/A";
         offers.details = "";
 
-        console.log("Dassault Aviation : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+
+    for (var i = 0; i < list_offers.length; i++) {
+        //console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').trim();
+
+        console.log("Dassault Aviation : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapAirFrance() {
     const page_url = 'https://recrutement.airfrance.com/offre-de-emploi/liste-offres.aspx';
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
         const $element = $(element);
@@ -65,16 +89,27 @@ async function scrapAirFrance() {
             return $(el).text().trim();
           }).get().join('');
 
-        //console.log(offers);
-        console.log("Air France : " + i)
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+
+    for (var i = 0; i < list_offers.length; i++) {
+        //console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#contenu').text().replace(/\s\s+/g, ' ').trim();
+
+        console.log("Air France : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapSanofi() {
     const page_url = 'https://fr.jobs.sanofi.com/recherche-d%27offres'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('.job-list').children('li').each((i, element) => {
         const $element = $(element);
@@ -85,9 +120,20 @@ async function scrapSanofi() {
         offers.function = "";
         offers.details = $element.children('a').find('.job-location').text();
 
-        console.log("Sanofi : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('.job-description').text().replace(/\s\s+/g, ' ').trim();
+
+        console.log("Sanofi : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
     
 };
 
@@ -95,6 +141,7 @@ async function scrapHermes() {
     const page_url = 'https://talents.hermes.com/fr/'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('div.card-block').each((i, element) => {
         
@@ -108,16 +155,26 @@ async function scrapHermes() {
             return $(el).text();
           }).get().join(' ');
 
-        //console.log(offers);
-        console.log("Hermes : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#detailOffer').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("Hermes : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapFramatome() {
     const page_url = 'https://framatome-career.talent-soft.com/offre-de-emploi/liste-offres.aspx?page=1&LCID=1033'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('div.ts-offer-card').each((i, element) => {
         const $element = $(element);
@@ -130,15 +187,26 @@ async function scrapFramatome() {
             return $(el).text();
           }).get().join(' ');
 
-        console.log("Framatome : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("Framatome : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapEngie() {
     const page_url = 'https://jobs.engie.com/jobs/search/76073636/page1'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('div.jlr_right_hldr').each((i, element) => {
         const $element = $(element);
@@ -150,16 +218,26 @@ async function scrapEngie() {
         offers.details = $element.find('p.jlr_cat_loc').map((i, el) => {
             return $(el).text().replace(/\s\s+/g, ' ').trim();
           }).get().join(' ');
+        list_offers.push(offers);
+    });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#description_box').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
 
         console.log("Engie : " + i);
-        idx.add_to_db(offers);
-    });
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapAlstom() {
     const page_url = 'https://jobsearch.alstom.com/search/?q=&sortColumn=referencedate&sortDirection=desc&startrow=1';
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('tr.data-row').each((i, element) => {
         const $element = $(element);
@@ -170,15 +248,26 @@ async function scrapAlstom() {
         offers.function = $element.find($('span.jobDepartment')).text();
         offers.details = ($element.find('span.jobLocation').text().replace(/\s\s+/g, ' ').trim() + $element.find('span.jobShifttype').text().replace(/\s\s+/g, ' ').trim() + $element.find('span.jobDate').text().replace(/\s\s+/g, ' ').trim());
 
-        console.log("Alstom : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div.jobDisplay').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("Alstom : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapNexter() {
     const page_url = 'https://nexter-recrutement.profils.org/offre-de-emploi/liste-offres.aspx?page=1&LCID=1036';
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('li.ts-offer-list-item.offerlist-item ').each((i, element) => {
         const $element = $(element);
@@ -191,16 +280,26 @@ async function scrapNexter() {
             return $(el).text();
           }).get().join(' /*/ ');
 
-        console.log("Nexter : " + i);
-        idx.add_to_db(offers);
-
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("Nexter : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapSafran() {
     const page_url = 'https://www.safran-group.com/jobs';
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('li.item').each((i, element) => {
         const $element = $(element);
@@ -213,15 +312,26 @@ async function scrapSafran() {
             return $(el).text();
           }).get().join(' /*/ '));
 
-        console.log("Safran : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#job-details').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("Safran : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapFnacDarty() {
     const page_url = 'https://recrutement.fnacdarty.com/offre-de-emploi/liste-offres.aspx?page=1&LCID=1036&mode=list'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
         const $element = $(element);
@@ -234,16 +344,26 @@ async function scrapFnacDarty() {
             return $(el).text();
           }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
 
-        //console.log(offers);
-        console.log("Fnac Darty : " + i)
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("Fnac Darty : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapMBDA() {
     const page_url = 'https://www.mbda-systems.com/jobs/?gestmax%5Bvac_sector%5D=&gestmax%5Bvac_localisation%5D=001&gestmax%5Bvac_job_type%5D='
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('table tbody tr').each((i, element) => {
         const $element = $(element);
@@ -256,16 +376,26 @@ async function scrapMBDA() {
             return $(el).text();
           }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
 
-        //console.log(offers);
-        console.log("MBDA : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div.col-lg-10.col-lg-offset-1').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("MBDA : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapLOREAL() {
     const page_url = 'https://careers.loreal.com/en_US/jobs/SearchJobs/?3_110_3=18022&3_33_3=134,133'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('article.article--result').each((i, element) => {
         const $element = $(element);
@@ -278,16 +408,26 @@ async function scrapLOREAL() {
             return $(el).text();
           }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
 
-        //console.log(offers);
-        console.log("L'Oreal : " + i);
-        idx.add_to_db(offers);
+          list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div.column__item').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("L'Oreal : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapEDF() {
     const page_url = 'https://www.edf.fr/edf-recrute/rejoignez-nous/voir-les-offres/nos-offres?search%5Blocation%5D=_TS_CO_Country_France&search%5BcurrentPath%5D=page_entity/345&search%5Bdiplome%5D=123'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('div.wrapper-offer').each((i, element) => {
         const $element = $(element);
@@ -298,16 +438,26 @@ async function scrapEDF() {
         offers.function = "N/A";
         offers.details = ($element.find('div.offer-date').text() + ' /*/ ' + $element.find('li.offer-type').text() + " /*/ " + $element.find('li.offer-state').text());
 
-        //console.log(offers);
-        console.log("EDF : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('section.job-posting').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("EDF : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapLVMH() {
     const page_url = 'https://www.lvmh.fr/talents/nous-rejoindre/nos-offres/liste-des-offres/?job=&place=&experience=&activity=&contract=&reference=#gt_offers-results'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('table tbody tr').each((i, element) => {
         const $element = $(element);
@@ -318,16 +468,26 @@ async function scrapLVMH() {
         offers.function = "N/A";
         offers.details = ($element.find('td.detail__h').text() + " /*/ " + $element.find('td.detail__h').prev('td').text());
 
-        //console.log(offers);
-        console.log("LVMH : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div.inner.inner--app1pre1.inner--w').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("LVMH : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapMotul() {
     const page_url = 'https://motul-recrute.talent-soft.com/job/list-of-jobs.aspx?mode=list'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
         const $element = $(element);
@@ -340,10 +500,19 @@ async function scrapMotul() {
             return $(el).text();
           }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
          
-        //console.log(offers);
-        console.log("Motul : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    for (var i = 0; i < list_offers.length; i++) {
+        console.log(list_offers[i].link);
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+
+        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        console.log("Motul : " + i);
+        idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    }
 };
 
 async function scrapSaintGobain() {

@@ -20,7 +20,7 @@ Offer.init({
 
 function createOffer(x) {
     Offer.create({ name: x.name, link: x.link, company: x.company,
-        function: x.function, details: x.details, 
+        function: x.function, details: x.details, desc: x.desc,
     }).then( offer => {
     console.log("Offer Generate ID", offer.id);
     });
