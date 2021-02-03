@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const idx = require("./OfferModel");
+const ora = require('ora');
 
 /* 
 Add ArianeGroup Scrap // Not Working yet (Workday)
@@ -28,17 +29,19 @@ async function scrapRichemont() {
 
         list_offers.push(offers);
     });
-
+    const spinner = ora('Scrapping Richemont\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        const { data } = await axios.get(list_offers[i].link);
-        const html = cheerio.load(data);
-
-        list_offers[i].desc = html('.job').text().replace(/\s\s+/g, ' ').trim();
-
-        console.log("Richemont : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const html = cheerio.load(data);
+            list_offers[i].desc = html('.job').text().replace(/\s\s+/g, ' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapDassaultAviation() {
@@ -58,18 +61,19 @@ async function scrapDassaultAviation() {
 
         list_offers.push(offers);
     });
-
+    const spinner = ora('Scrapping Dassault Aviation\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        //console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').trim();
-
-        console.log("Dassault Aviation : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapAirFrance() {
@@ -91,18 +95,19 @@ async function scrapAirFrance() {
 
         list_offers.push(offers);
     });
-
+    const spinner = ora('Scrapping Air France\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        //console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#contenu').text().replace(/\s\s+/g, ' ').trim();
-
-        console.log("Air France : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#contenu').text().replace(/\s\s+/g, ' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapSanofi() {
@@ -122,19 +127,19 @@ async function scrapSanofi() {
 
         list_offers.push(offers);
     });
-
+    const spinner = ora('Scrapping Sanofi\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('.job-description').text().replace(/\s\s+/g, ' ').trim();
-
-        console.log("Sanofi : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
-    
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('.job-description').text().replace(/\s\s+/g, ' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapHermes() {
@@ -157,17 +162,19 @@ async function scrapHermes() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Hermes\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#detailOffer').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Hermes : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#detailOffer').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapFramatome() {
@@ -189,17 +196,19 @@ async function scrapFramatome() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Framatome\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Framatome : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapEngie() {
@@ -220,17 +229,19 @@ async function scrapEngie() {
           }).get().join(' ');
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Engie\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#description_box').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Engie : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#description_box').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapAlstom() {
@@ -250,17 +261,19 @@ async function scrapAlstom() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Alstom\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div.jobDisplay').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Alstom : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div.jobDisplay').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapNexter() {
@@ -282,17 +295,19 @@ async function scrapNexter() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Nexter\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Nexter : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapSafran() {
@@ -314,17 +329,19 @@ async function scrapSafran() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Safran\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#job-details').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Safran : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#job-details').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapFnacDarty() {
@@ -346,17 +363,19 @@ async function scrapFnacDarty() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping FNAC Darty\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Fnac Darty : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapMBDA() {
@@ -378,17 +397,19 @@ async function scrapMBDA() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping MBDA\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div.col-lg-10.col-lg-offset-1').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("MBDA : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div.col-lg-10.col-lg-offset-1').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapLOREAL() {
@@ -410,17 +431,19 @@ async function scrapLOREAL() {
 
           list_offers.push(offers);
     });
+    const spinner = ora("Scrapping L'Oreal\n");
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div.column__item').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("L'Oreal : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div.column__item').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapEDF() {
@@ -440,17 +463,19 @@ async function scrapEDF() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping EDF\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('section.job-posting').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("EDF : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('section.job-posting').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapLVMH() {
@@ -470,17 +495,19 @@ async function scrapLVMH() {
 
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping LVMH\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div.inner.inner--app1pre1.inner--w').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("LVMH : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div.inner.inner--app1pre1.inner--w').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapMotul() {
@@ -502,25 +529,28 @@ async function scrapMotul() {
          
         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Motul\n');
+    spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
-
-        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Motul : " + i);
-        idx.add_to_db(list_offers[i]);
-        //console.log(list_offers[i]);
-    }
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapSaintGobain() {
     const page_url = 'https://joinus.saint-gobain.com/fr?country=FR&region[]=106&region[]=361&region[]=421&type[]=38&type[]=41&function[]=63&function[]=57&function[]=64&search='
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
-    $('div.views-row').each((i, element) => {
+    $('div.row-offre').each((i, element) => {
         const $element = $(element);
         const offers = {};
         offers.name = $element.find('span.field.field--name-title.field--type-string.field--label-hidden').text().replace(/\s\s+/g, ' ').trim();
@@ -530,16 +560,28 @@ async function scrapSaintGobain() {
         offers.details = ($element.find('span.ref').text().replace(/\s\s+/g, ' ').trim() + " /*/ "
          + $element.find('div.field__item').text().replace(/\s\s+/g, ' ').trim());
          
-        console.log(offers);
-        console.log("Saint Gobain : " + i);
-        idx.add_to_db(offers);
+         list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Saint Gobain\n');
+    spinner.start();
+    for (var i = 0; i < list_offers.length; i++) {
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div.node--type-job').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapThales() {
     const page_url = 'https://emploi.thalesgroup.com/recherche-d%27offres'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('section#applied-filters').next('ul').find('li').each((i, element) => {
         const $element = $(element);
@@ -550,16 +592,28 @@ async function scrapThales() {
         offers.function = "N/A";
         offers.details = ($element.find('span.job-date-posted').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('span.job-location').text().replace(/\s\s+/g, ' ').trim());
 
-        //console.log(offers);
-        console.log("Thales : " + i);
-        idx.add_to_db(offers);
+        list_offers.push(offers);
     });
+    const spinner = ora('Scrapping Thales\n');
+    spinner.start();
+    for (var i = 0; i < list_offers.length; i++) {
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('section.job-description').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapNavalGroup() {
     const page_url = 'https://www.naval-group.com/fr/nous-rejoindre-85?keywords=&offerFamilyCategory=&contractType=&country=79&city=&op=Rechercher&form_build_id=form-fIocKsmgflhM_Us7HcDb-_tjAsrVbZc13Sasq2el-sk&form_id=talent_soft_offers_filters_form&page=0'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('ul.list-type-a').find('li').each((i, element) => {
         const $element = $(element);
@@ -571,17 +625,29 @@ async function scrapNavalGroup() {
         offers.details = ($element.find('p.job-offer-item-category').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('ul.job-offer-item-info').text().replace(/\s\s+/g, ' ').trim());
 
         if (offers.name !== '') {
-            //console.log(offers);
-            console.log("Naval Group : " + i);
-            idx.add_to_db(offers);
+            list_offers.push(offers);
         }
     });
+    const spinner = ora('Scrapping Naval Group\n');
+    spinner.start();
+    for (var i = 0; i < list_offers.length; i++) {
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div.job-offer').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapLisiAerospace() {
     const page_url = 'https://www.lisi-aerospace.com/en/join-us/careers/'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('div.row.no-gutters.table-stripped-body').find('a').each((i, element) => {
         const $element = $(element);
@@ -593,17 +659,29 @@ async function scrapLisiAerospace() {
         offers.details = ($element.find('div.col-10.col-sm:nth-child(1)').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('div.col-10.col-sm:nth-child(2)').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('div.col-10.col-sm:nth-child(3)').text().replace(/\s\s+/g, ' ').trim() + " /*/ " + $element.find('div.col-10.col-sm:nth-child(6)').text().replace(/\s\s+/g, ' ').trim() + ", " + $element.find('div.col-10.col-sm:nth-child(7)').text().replace(/\s\s+/g, ' ').trim());
 
         if (offers.name !== '') {
-            //console.log(offers);
-            console.log("Lisi Aerospace : " + i);
-            idx.add_to_db(offers);
+            list_offers.push(offers);
         }
     });
+    const spinner = ora('Scrapping Lisi Aerospace\n');
+    spinner.start();
+    for (var i = 0; i < list_offers.length; i++) {
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div.job_description').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 async function scrapRATPdev() {
     const page_url = 'https://careers.ratpdev.com/offre-de-emploi/liste-offres.aspx?page=1&LCID=1036'
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
+    var list_offers = [];
 
     $('ul.ts-related-offers__row').find('li').each((i, element) => {
         const $element = $(element);
@@ -617,15 +695,26 @@ async function scrapRATPdev() {
           }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
 
         if (offers.name !== '') {
-            //console.log(offers);
-            console.log("RATP Dev : " + i);
-            idx.add_to_db(offers);
+            list_offers.push(offers);
         }
     });
+    const spinner = ora('Scrapping RATP Dev\n');
+    spinner.start();
+    for (var i = 0; i < list_offers.length; i++) {
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const $ = cheerio.load(data);
+            list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
 };
 
 
-idx.resetDatabase();
+//idx.resetDatabase();
 function scrapAll() {
     scrapRichemont();
     scrapDassaultAviation();

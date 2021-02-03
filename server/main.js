@@ -8,24 +8,20 @@ const scrapper = require("./scrappers");
 
 function runMode() {
     console.log('Start at : ', new Date());
+    const spinner = ora('Waiting next wave\n');
+    spinner.start();
+    spinner.warn();
     scrapper.scrapAll();
+    spinner.start();
 
-    const spinner = ora('Waiting next wave\n').start();
-
-        setTimeout(() => {
-            spinner.color = 'yellow';
-            spinner.text = 'Waiting next wave\n';
-        }, 1000);
+    
 
     cron.scheduleJob('*/30 * * * *', function(){
         scrapper.scrapAll();
+        spinner.warn();
         console.log('Last update : ', new Date());
-        const spinner = ora('Waiting next wave\n').start();
-
-        setTimeout(() => {
-            spinner.color = 'yellow';
-            spinner.text = 'Waiting next wave\n';
-        }, 1000);
+        spinner.start();
+        
     });
 
 }

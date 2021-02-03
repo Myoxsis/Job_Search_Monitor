@@ -25,7 +25,7 @@ const app = express();
 app.use(morgan('common'));
 app.use(helmet());
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3001',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
 }));
 
 app.use(express.json());
@@ -45,15 +45,12 @@ app.get('/offers', async (req, res) => {
     }
 });
 
-app.get('/offers/:offerId', async (req, res) => {
-    const offerId = req.params.offerId;
+app.get('/offers/today', async (req, res) => {
+    const TODAY_START = new Date().setHours(0, 0, 0, 0);
+    const NOW = new Date();
     try {
-        const offer = await Offer.findAll({
-            where: {
-                id : offerId
-            }
-        })
-        res.json({ offer });
+        const offer = await idx.getTodayOffers(TODAY_START, NOW);
+        res.json(offer);
     }
     catch(error) {
         console.error(error);

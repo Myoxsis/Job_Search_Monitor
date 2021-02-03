@@ -2,66 +2,96 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const { colors } = require("prompt");
 const idx = require("./OfferModel");
+const ora = require('ora');
 
 /*
     - Daher not working / Complex hierarchy and automated page
     - Add Engie Scrap // Not working yet
 */
 
-async function scrapMotul() {
-    const page_url = 'https://motul-recrute.talent-soft.com/job/list-of-jobs.aspx?mode=list'
+async function scrapTotal() {
+    const page_url = 'https://krb-sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=30080&siteid=6559#keyWordSearch=pld';
     const { data } = await axios.get(page_url);
     const $ = cheerio.load(data);
-    var list_offers = [];
+    //var list_offers = [];
 
-    $('li.ts-offer-list-item.offerlist-item').each((i, element) => {
+    $('div.liner').each((i, element) => {
         const $element = $(element);
         const offers = {};
-        offers.name = $element.find('h3').text().replace(/\s\s+/g, ' ').trim();
-        offers.link = ("https://motul-recrute.talent-soft.com" + $element.find('h3').find('a').attr('href'));
-        offers.company = "Motul";
-        offers.function = "N/A";
-        offers.details = $element.find('ul.ts-offer-list-item__description').find('li').map((i, el) => {
-            return $(el).text();
-          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
-         
-        list_offers.push(offers);
-    });
-    for (var i = 0; i < list_offers.length; i++) {
-        console.log(list_offers[i].link);
-        const { data } = await axios.get(list_offers[i].link);
-        const $ = cheerio.load(data);
+        offers.name = $element.find($('a.jobtitle')).text().replace(/\s\s+/g, ' ').trim();
+        //offers.link = $element.find($('a.jobtitle')).attr('href');
+        //offers.company = "Total";
+        //offers.function = $element.find($('p.position3')).text().replace(/\s\s+/g, ' ').trim();;
+        //offers.details = ($element.find($('div.jobValues')).map((i, el) => {
+        //    return $(el).text();
+        //  }).get().join(' /*/ '));
 
-        list_offers[i].desc = $('div#detail_offre').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
-
-        console.log("Motul : " + i);
-        //idx.add_to_db(list_offers[i]);
-        console.log(list_offers[i]);
-    }
-};
-
-async function scrapSaintGobain() {
-    const page_url = 'https://joinus.saint-gobain.com/fr?country=FR&region[]=106&region[]=361&region[]=421&type[]=38&type[]=41&function[]=63&function[]=57&function[]=64&search='
-    const { data } = await axios.get(page_url);
-    const $ = cheerio.load(data);
-
-    $('div.views-row').each((i, element) => {
-        const $element = $(element);
-        const offers = {};
-        offers.name = $element.find('span.field.field--name-title.field--type-string.field--label-hidden').text().replace(/\s\s+/g, ' ').trim();
-        offers.link = ("https://joinus.saint-gobain.com" + $element.find('a').attr('href'));
-        offers.company = "Saint Gobain";
-        offers.function = "N/A";
-        offers.details = ($element.find('span.ref').text().replace(/\s\s+/g, ' ').trim() + " /*/ "
-         + $element.find('div.field__item').text().replace(/\s\s+/g, ' ').trim());
-         
+        //list_offers.push(offers);
         console.log(offers);
-        console.log("Saint Gobain : " + i);
-        idx.add_to_db(offers);
     });
+    //const spinner = ora('Scrapping Total\n');
+    //spinner.start();
+    //for (var i = 0; i < list_offers.length; i++) {
+        //try{
+            
+        //} catch(e) {
+            //console.log(e.message);
+        //}
+        //console.log(list_offers[i].link);
+        //const { data } = await axios.get(list_offers[i].link);
+        //const $ = cheerio.load(data);
+
+        //list_offers[i].desc = $('div#job-details').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        //console.log("Total : " + i);
+        //idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    //};
+    //spinner.succeed();
+    //console.log("Scrapped Total : " + list_offers.length);
 };
 
-scrapMotul();
+async function scrapAirbus() {
+    const page_url = 'https://www.airbus.com/careers/search-and-apply/search-for-vacancies.html?filters=filter_2_1072&resultbypage=100';
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+    //var list_offers = [];
+
+    $('.c-jobcarousel__item').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find($('.c-jobcarousel__slider--title')).text().replace(/\s\s+/g, ' ').trim();
+        offers.link = $element.find($('.c-jobcarousel__slider--title')).find('a').attr('href');
+        offers.company = 'Airbus';
+        offers.function = $element.find($('.colDepartment')).text().replace(/\s\s+/g, ' ').trim();
+        offers.details = $element.find($('.colLocation')).text().replace(/\s\s+/g, ' ').trim();
+
+        //list_offers.push(offers);
+        console.log(offers, i);
+    });
+    //const spinner = ora('Scrapping Total\n');
+    //spinner.start();
+    //for (var i = 0; i < list_offers.length; i++) {
+        //try{
+            
+        //} catch(e) {
+            //console.log(e.message);
+        //}
+        //console.log(list_offers[i].link);
+        //const { data } = await axios.get(list_offers[i].link);
+        //const $ = cheerio.load(data);
+
+        //list_offers[i].desc = $('div#job-details').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+
+        //console.log("Total : " + i);
+        //idx.add_to_db(list_offers[i]);
+        //console.log(list_offers[i]);
+    //};
+    //spinner.succeed();
+    //console.log("Scrapped Total : " + list_offers.length);
+};
+
+scrapAirbus();
 
 /*
 Arianegroup

@@ -1,5 +1,5 @@
-const { Sequelize, Model, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('postgres://maxime_alain:www.myoxsis.com@localhost:5432/job_monitor');
+const { Sequelize, Model, DataTypes, Op } = require('sequelize');
+const sequelize = new Sequelize('postgres://maxime_alain:www.myoxsis.com@localhost:5432/job_monitor', {logging: false});
 
 offer = {};
 
@@ -41,23 +41,23 @@ function add_to_db(x) {
     isIdUnique(x)
         .then(isUnique => {
             if (!isUnique) {
-                console.log('Not Added : Already exists in database');
+                //console.log('Not Added : Already exists in database');
             }
             else {
                 if (x.name.toLowerCase().search(/(stage|alternance|stagiaire|apprenti|apprentissage|internship|these|thesis|intern|stg)/g) > -1){
-                    console.log("Not Added : Stage or Alternance");
+                    //console.log("Not Added : Stage or Alternance");
                 }
                 else if (x.details.toLowerCase().search(/(stage|alternance|stagiaire|apprenti|apprentissage|internship|these|thesis|intern|stg)/g) > -1){
-                    console.log("Not Added : Stage or Alternance");
+                    //console.log("Not Added : Stage or Alternance");
                 }
                else { 
                     createOffer(x);
-                    console.log("Added to db");
+                    //console.log("Added to db");
                 }
             }
         })
         .catch(error => {
-            console.error(error);
+            //console.error(error);
         });
 }
 
@@ -70,7 +70,14 @@ function getDB() {
     return offers;
 }
 
-// the defined model is the class itself
-console.log(Offer === sequelize.models.offer);
+function getTodayOffers(day, now) {
+    today_offer = Offer.findAll({ where: { createdAt: { [Op.between]: [day, now] },}});
+    return today_offer;
+}
 
-module.exports = { createOffer, isIdUnique, resetDatabase, add_to_db, getDB };
+
+
+// the defined model is the class itself
+//console.log(Offer === sequelize.models.offer);
+
+module.exports = { createOffer, isIdUnique, resetDatabase, add_to_db, getDB, getTodayOffers };
