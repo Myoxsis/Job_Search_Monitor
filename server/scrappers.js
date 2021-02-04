@@ -713,6 +713,37 @@ async function scrapRATPdev() {
     spinner.succeed();
 };
 
+async function scrapAirbus() {
+    const page_url = 'https://www.airbus.com/careers/search-and-apply/search-for-vacancies.html?filters=filter_2_1072&resultbypage=100';
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+    var list_offers = [];
+
+    $('.c-jobcarousel__item').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find($('.c-jobcarousel__slider--title')).text().replace(/\s\s+/g, ' ').trim();
+        offers.link = ("https://www.airbus.com" + $element.find($('.c-jobcarousel__slider--title')).find('a').attr('href'));
+        offers.company = 'Airbus';
+        offers.function = $element.find($('.c-jobcarousel__slider--subtitle')).text().replace(/\s\s+/g, ' ').trim();
+        offers.details = $element.find($('.c-jobcarousel__slider--location')).text().replace(/\s\s+/g, ' ').trim();
+        list_offers.push(offers);
+    });
+    const spinner = ora('Scrapping Airbus\n');
+    spinner.start();
+    for (var i = 0; i < list_offers.length; i++) {
+        try{
+        const { data } = await axios.get(list_offers[i].link);
+        const $ = cheerio.load(data);
+        list_offers[i].desc = $('.c-contentjob__content').text().replace(/\s\s+/g, ' ').replace('&lt;p&gt;', ' ').replace('&lt;/p&gt;', ' ').replace('&lt;/li&gt;', ' ').replace('&lt;li style="text-align: justify;"&gt;', ' ').replace('\t',' ').trim();
+        idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
+};
+
 
 //idx.resetDatabase();
 function scrapAll() {
@@ -737,6 +768,7 @@ function scrapAll() {
     scrapNavalGroup();
     scrapLisiAerospace();
     scrapRATPdev();
+    scrapAirbus();
 };
 
 
