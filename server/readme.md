@@ -16,10 +16,14 @@
         [] If hot&skilled, electron app
     [] Add notification system
 
+    [] Daher not working / Complex hierarchy and automated page
+    [] Add Engie Scrap // Not working yet
+
 ## Notes
     28/12/2020 : Update of all MDs of the project.
     14/01/2021 : Added the folder offer/todat for the offer of the day. But some work is needed on the timestamps. (Not 100% accurate yet)
     03/02/2021 : Added Airbus Scrapper.
+    09/02/2021 : Added new scrappers : SMCP, PSA. Started Sodern Scrapper, missing the Desc field extract. 
     
 ## Site TBD
     https://www.airliquide.com/fr/carrieres/offres-emploi #not working yet
@@ -40,9 +44,7 @@
     https://www.nestle.fr/jobs/search-jobs?keyword=&country=FR&location=&career_area=All&company=All
     https://careers.faurecia.com/search/?createNewAlert=false&q=&locationsearch=france&optionsFacetsDD_customfield3=&optionsFacetsDD_country=&optionsFacetsDD_shifttype=Unlimited
     https://www.emploi.sncf.com/nos-offres/contrat/577-578/localisation/40629/
-    https://www.smcp.com/fr/talents/offres-d-emploi/?keywords=&geographicalLocation=22&offerCountry=79&offerRegion=&organisation=&offerFamilyCategory=&contractType=&experienceLevel=
     https://jobs.groupe-psa.com/offre-de-emploi/liste-offres.aspx?mode=layer&lcid=1036&facet_JobDescription_Contract=577
-    https://www.sodern.com/website/fr/ref/Carrières_262.html
 
 
     Workday Website :

@@ -37,6 +37,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/offers', async (req, res) => {
+
+    // SELECT "id", "name", "link", "company", "function", "details", "desc", "createdAt", "updatedAt" 
+    // FROM "offers" AS "offer"
+
     try {
         const offer = await idx.getDB();
         res.json(offer);
@@ -46,6 +50,11 @@ app.get('/offers', async (req, res) => {
 });
 
 app.get('/offers/today', async (req, res) => {
+
+    // SELECT "id", "name", "link", "company", "function", "details", "desc", "createdAt", "updatedAt" 
+    // FROM "offers" AS "offer" 
+    // WHERE "offer"."createdAt" BETWEEN 'START_DAY' AND 'NOW'
+
     const TODAY_START = new Date().setHours(0, 0, 0, 0);
     const NOW = new Date();
     try {

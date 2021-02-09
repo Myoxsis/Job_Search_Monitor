@@ -3,10 +3,26 @@ import { listAllOffers } from './API';
 // import Modal from "./Components/Modal";
 import OfferBox from "./Components/OfferBox";
 import Clock from "./Components/Clock";
+import useOfferSearch from './useOfferSearch';
 
 const App = () => {
-  const [ offersList, setOffersList] = useState([]);
+  //const [ offersList, setOffersList] = useState([]);
 
+  const [ query, setQuery ] = useState([])
+  const [ pageNumber, setPageNumber] = useState(1)
+
+  function handleSearch(e) {
+    setQuery(e.target.value)
+    setPageNumber(1)
+  }
+
+
+  const {
+    loading,
+    offers,
+    hasMore,
+    error
+  } = useOfferSearch(query, pageNumber)
   /*
   state = {
         show: false
@@ -18,16 +34,18 @@ const App = () => {
       };
   */
 
-  useEffect(() => {
-    (async () => {
-      const offersList = await listAllOffers();
+  
+
+  //useEffect(() => {
+    //(async () => {
+      //const offersList = await listAllOffers();
       //var showModal = await false;
       // eslint-disable-next-line
-      setOffersList(offersList);
+      //setOffersList(offersList);
       //setShowModal(showModal);
-      console.log(offersList);
-    })();
-  }, []);
+      //console.log(offersList);
+    //})();
+  //}, []);
   
 /*
 <div>
@@ -37,13 +55,8 @@ const App = () => {
 
 */
 
-  return (
-    <div className="App">
-      <Clock />
-      <header className="App-header">
-        <h2>Job Monitoring</h2>
-        
-        <div className="divOffer">
+/*
+<div className="divOffer">
         {offersList.map(entry => {
           return (
           <div>
@@ -52,6 +65,26 @@ const App = () => {
           )
         })}
         </div>
+
+*/
+
+  return (
+    <div className="App">
+      <Clock />
+      <header className="App-header">
+        <h2>Job Monitoring</h2>
+
+        <div>
+          <input type='text' onChange={handleSearch}></input>
+        </div>
+        
+          {offers.map(offer => {
+            return <div key={offer}>{offer}</div>
+          })}
+          <div>{loading && 'Loading ...'}</div>
+          <div>{error && 'Error ...'}</div>
+        
+        
       </header>
     </div>
   );
