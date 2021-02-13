@@ -44,7 +44,6 @@
     https://www.nestle.fr/jobs/search-jobs?keyword=&country=FR&location=&career_area=All&company=All
     https://careers.faurecia.com/search/?createNewAlert=false&q=&locationsearch=france&optionsFacetsDD_customfield3=&optionsFacetsDD_country=&optionsFacetsDD_shifttype=Unlimited
     https://www.emploi.sncf.com/nos-offres/contrat/577-578/localisation/40629/
-    https://jobs.groupe-psa.com/offre-de-emploi/liste-offres.aspx?mode=layer&lcid=1036&facet_JobDescription_Contract=577
 
 
     Workday Website :

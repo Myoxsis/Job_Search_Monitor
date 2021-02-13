@@ -19,20 +19,41 @@ import vanCleefArpelsLogo from './img/vc&a.png';
 import engieLogo from './img/engie.png';
 import lisiAeroLogo from './img/lisiAero.png';
 
-export default class OfferBox extends React.Component {
-    constructor(props) {
-        super(props);
-        console.log(props);
-        this.state = {desc : this.props.name,
-                      company : this.props.company};
-      }
+const OfferBox = ({offers, loading}) => {
+    if (loading) {
+        return <h2>Loading ...</h2>
+    }
 
-      componentDidMount () {
-          this.cleanDesc();
-          this.displayCompanyLogo();
-      }
+    return (
+        <div className='divOffer'>
+            {offers.map(offer => (
+                <div className="offerBox" key={offer.id}>
+                <div className="offerItem">
+                    <div className="offerCompany">
+                    <div className="offerCompanyImg">{/*this.logoImg*/ offer.company}</div>
+                    </div>
+                    <div className="offerDescription">
+                    <div className="offerName">{offer.name} </div>
+                    <div className="offerLink"><a href={offer.link} target="_blank">Lien</a></div>
+                    </div>
+                    <div className="buttonContainer">
+                    <button className="xButton">✔️</button>
+                    <button className="ackButton">🖤</button>
+                    </div>
+                </div>
+                </div>
+            ))}
+        </div>
+    );
+};
 
-      cleanDesc () {
+export default OfferBox;
+
+/*
+
+
+
+cleanDesc () {
         var description = this.state.desc.split(',')[0]
         description = description.split('Published')[0]
         this.setState({desc : description})
@@ -101,24 +122,4 @@ export default class OfferBox extends React.Component {
         };
       }
 
-    
-      render() {
-        return (
-            <div className="offerBox">
-            <div className="offerItem">
-              <div className="offerCompany">
-                <div className="offerCompanyImg">{/*this.logoImg*/ this.props.company}</div>
-              </div>
-              <div className="offerDescription">
-                <div className="offerName">{this.props.name} </div>
-                <div className="offerLink"><a href={this.props.link} target="_blank">Lien</a></div>
-              </div>
-              <div className="buttonContainer">
-                <button className="xButton">✔️</button>
-                <button className="ackButton">🖤</button>
-              </div>
-            </div>
-          </div>
-        );
-      }
-}
+*/

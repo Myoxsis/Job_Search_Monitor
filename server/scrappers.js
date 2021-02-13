@@ -801,7 +801,6 @@ async function scrapPSA() {
     spinner.start();
     for (var i = 0; i < list_offers.length; i++) {
         try{
-            console.log(list_offers[i].link);
             const { data } = await axios.get(list_offers[i].link);
             const $ = cheerio.load(data);
 

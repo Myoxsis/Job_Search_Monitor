@@ -1,72 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import { listAllOffers } from './API';
+import axios from 'axios';
 // import Modal from "./Components/Modal";
 import OfferBox from "./Components/OfferBox";
+import Pagination from './Components/Pagination';
 import Clock from "./Components/Clock";
-import useOfferSearch from './useOfferSearch';
 
 const App = () => {
-  //const [ offersList, setOffersList] = useState([]);
+  const [ offers, setOffers ] = useState([]);
+  const [ loading, setLoading ] = useState(false);
+  const [ currentPage, setCurrentPage ] = useState(1);
+  const [ offersPerPage ] = useState(25);
+  const [q, setQ] = useState("");
 
-  const [ query, setQuery ] = useState([])
-  const [ pageNumber, setPageNumber] = useState(1)
+  const API_URL = 'http://localhost:1337';
 
-  function handleSearch(e) {
-    setQuery(e.target.value)
-    setPageNumber(1)
+  useEffect(() => {
+    const fetchOffers = async () => {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/offers`);
+      setOffers(res.data);
+      setLoading(false);
+    }
+
+    fetchOffers();
+  }, []);
+
+  function search(offers){
+    return offers.filter(offer => offer.name.toLowerCase().indexOf(q.toLowerCase()) > -1)
   }
 
+  //Get current posts
+  const indexOfLastOffer = currentPage * offersPerPage;
+  const indexOfFirstOffer = indexOfLastOffer - offersPerPage;
+  const currentOffers = search(offers);
+  const offersToDisplay = currentOffers.slice(indexOfFirstOffer, indexOfLastOffer);
 
-  const {
-    loading,
-    offers,
-    hasMore,
-    error
-  } = useOfferSearch(query, pageNumber)
-  /*
-  state = {
-        show: false
-      };
-      showModal = e => {
-        this.setState({
-          show: true
-        });
-      };
-  */
-
-  
-
-  //useEffect(() => {
-    //(async () => {
-      //const offersList = await listAllOffers();
-      //var showModal = await false;
-      // eslint-disable-next-line
-      //setOffersList(offersList);
-      //setShowModal(showModal);
-      //console.log(offersList);
-    //})();
-  //}, []);
-  
-/*
-<div>
-              <Modal show={this.state.show}/>
-              <button  onClick={e => {this.showModal();}}> show Modal </button>
-        </div>
-
-*/
-
-/*
-<div className="divOffer">
-        {offersList.map(entry => {
-          return (
-          <div>
-            <OfferBox company={entry.company} name={entry.name} link={entry.link} />
-          </div>
-          )
-        })}
-        </div>
-
-*/
+  // Change Page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="App">
@@ -75,16 +45,14 @@ const App = () => {
         <h2>Job Monitoring</h2>
 
         <div>
-          <input type='text' onChange={handleSearch}></input>
+          <input type='text' value={q} onChange={(e) => setQ(e.target.value)}></input>
         </div>
         
-          {offers.map(offer => {
-            return <div key={offer}>{offer}</div>
-          })}
-          <div>{loading && 'Loading ...'}</div>
-          <div>{error && 'Error ...'}</div>
-        
-        
+        <OfferBox offers={offersToDisplay} loading={loading} />  
+        <Pagination 
+         offersPerPage={offersPerPage}
+         totalOffers={currentOffers.length}
+         paginate={paginate} />
       </header>
     </div>
   );
