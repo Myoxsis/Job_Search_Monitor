@@ -13,14 +13,14 @@ body {
 
 .offerBox {
   display: inline-block;
-  border: 2px solid black;
+  border: 0.5px solid rgb(139, 139, 139);
   border-radius: 5px;
   padding: 5px;
   margin: 10px;
-  /*width: calc(30% - 10px);*/
-  width: calc(100% - 2rem);
+  width: calc(45% - 10px);
+  /*width: calc(100% - 2rem);*/
   height: 80px;
-  background-color: aliceblue;
+  background-color: white;
 }
 
 .offerItem {
@@ -148,6 +148,11 @@ body {
 .pagination-sm .page-item:last-child .page-link {
   border-top-right-radius: 0.2rem;
   border-bottom-right-radius: 0.2rem;
+}
+
+.searchBar {
+  padding: 15px;
+  width: calc(100% - 50px);
 }
 
 button {

@@ -18,10 +18,112 @@ import thalesLogo from './img/thales.png';
 import vanCleefArpelsLogo from './img/vc&a.png';
 import engieLogo from './img/engie.png';
 import lisiAeroLogo from './img/lisiAero.png';
+import saintGobainLogo from './img/saint-gobain.png';
+import airbusLogo from './img/airbus.png';
+import psaLogo from './img/psa.png';
+import claudiePierlotLogo from './img/claudiepierlot.png';
+import sandroLogo from './img/sandro.png';
+import majeLogo from './img/maje.png';
+import deFursacLogo from './img/defursac.jpeg';
+import smcpLogo from './img/smcp.jpeg';
 
 const OfferBox = ({offers, loading}) => {
+
+    function cleanDesc (offer) {
+        var description = offer.split(',')[0]
+        description = description.split('Published')[0]
+        return description
+    }
+
     if (loading) {
         return <h2>Loading ...</h2>
+    }
+
+    function displayCompanyLogo (company) {
+        if (company === 'Safran') {
+            return <img src={safranLogo} alt={company}></img>;
+        }
+        else if (company === 'LVMH') {
+            return <img src={lvmhLogo} alt={company}></img>;
+        }
+        else if (company === 'Dassault Aviation') {
+            return <img src={dassaultAviationLogo} alt={company}></img>;
+        }
+        else if (company === 'Alstom') {
+            return <img src={alstomLogo} alt={company}></img>;
+        }
+        else if (company === 'Naval Group') {
+            return <img src={navalGroupLogo} alt={company}></img>;
+        }
+        else if (company === 'Sanofi') {
+            return <img src={sanofiLogo} alt={company}></img>;
+        }
+        else if (company === 'RATP Dev') {
+            return <img src={ratpDevLogo} alt={company}></img>;
+        }
+        else if (company === "L'Oreal") {
+            return <img src={lorealLogo} alt={company}></img>;
+        }
+        else if (company === "EDF") {
+            return <img src={edfLogo} alt={company}></img>;
+        }
+        else if (company === "MBDA") {
+            return <img src={mbdaLogo} alt={company}></img>;
+        }
+        else if (company === "Fnac Darty") {
+            return <img src={fnacDartyLogo} alt={company}></img>;
+        }
+        else if (company === "Framatome") {
+            return <img src={framatomeLogo} alt={company}></img>;
+        }
+        else if (company === "Hermes") {
+            return <img src={hermesLogo} alt={company}></img>;
+        }
+        else if (company === "Nexter") {
+            return <img src={nexterLogo} alt={company}></img>;
+        }
+        else if (company === "Motul") {
+            return <img src={motulLogo} alt={company}></img>;
+        }
+        else if (company === "Thales") {
+            return <img src={thalesLogo} alt={company}></img>;
+        }
+        else if (company === "Van Cleef & Arpels") {
+            return <img src={vanCleefArpelsLogo} alt={company}></img>;
+        }
+        else if (company === "Engie") {
+            return <img src={engieLogo} alt={company}></img>;
+        }
+        else if (company === "Lisi Aerospace") {
+            return <img src={lisiAeroLogo} alt={company}></img>;
+        }
+        else if (company === "Saint Gobain") {
+            return <img src={saintGobainLogo} alt={company}></img>;
+        }
+        else if (company === "Airbus") {
+            return <img src={airbusLogo} alt={company}></img>;
+        }
+        else if (company === "PSA") {
+            return <img src={psaLogo} alt={company}></img>;
+        }
+        else if (company === "Claudie Pierlot") {
+            return <img src={claudiePierlotLogo} alt={company}></img>;
+        }
+        else if (company === "Sandro") {
+            return <img src={sandroLogo} alt={company}></img>;
+        }
+        else if (company === "Maje") {
+            return <img src={majeLogo} alt={company}></img>;
+        }
+        else if (company === "De Fursac") {
+            return <img src={deFursacLogo} alt={company}></img>;
+        }
+        else if (company === "SMCP") {
+            return <img src={smcpLogo} alt={company}></img>;
+        }
+        else {
+            return company;
+        };
     }
 
     return (
@@ -30,10 +132,10 @@ const OfferBox = ({offers, loading}) => {
                 <div className="offerBox" key={offer.id}>
                 <div className="offerItem">
                     <div className="offerCompany">
-                    <div className="offerCompanyImg">{/*this.logoImg*/ offer.company}</div>
+                    <div className="offerCompanyImg">{displayCompanyLogo(offer.company)}</div>
                     </div>
                     <div className="offerDescription">
-                    <div className="offerName">{offer.name} </div>
+                    <div className="offerName">{cleanDesc(offer.name)} </div>
                     <div className="offerLink"><a href={offer.link} target="_blank">Lien</a></div>
                     </div>
                     <div className="buttonContainer">
@@ -51,75 +153,5 @@ export default OfferBox;
 
 /*
 
-
-
-cleanDesc () {
-        var description = this.state.desc.split(',')[0]
-        description = description.split('Published')[0]
-        this.setState({desc : description})
-      }
-
-      displayCompanyLogo () {
-        if (this.props.company === 'Safran') {
-            var logoImg = <img src={safranLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === 'LVMH') {
-            var logoImg = <img src={lvmhLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === 'Dassault Aviation') {
-            var logoImg = <img src={dassaultAviationLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === 'Alstom') {
-            var logoImg = <img src={alstomLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === 'Naval Group') {
-            var logoImg = <img src={navalGroupLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === 'Sanofi') {
-            var logoImg = <img src={sanofiLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === 'RATP Dev') {
-            var logoImg = <img src={ratpDevLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "L'Oreal") {
-            var logoImg = <img src={lorealLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "EDF") {
-            var logoImg = <img src={edfLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "MBDA") {
-            var logoImg = <img src={mbdaLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Fnac Darty") {
-            var logoImg = <img src={fnacDartyLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Framatome") {
-            var logoImg = <img src={framatomeLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Hermes") {
-            var logoImg = <img src={hermesLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Nexter") {
-            var logoImg = <img src={nexterLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Motul") {
-            var logoImg = <img src={motulLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Thales") {
-            var logoImg = <img src={thalesLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Van Cleef & Arpels") {
-            var logoImg = <img src={vanCleefArpelsLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Engie") {
-            var logoImg = <img src={engieLogo} alt={this.props.company}></img>;
-        }
-        else if (this.props.company === "Lisi Aerospace") {
-            var logoImg = <img src={lisiAeroLogo} alt={this.props.company}></img>;
-        }
-        else {
-            var logoImg = this.props.company;
-        };
-      }
 
 */
