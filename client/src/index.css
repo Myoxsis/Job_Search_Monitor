@@ -76,6 +76,11 @@ body {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.page-link.active {
+  color: white;
+  background-color: blue;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-link {
     transition: none;

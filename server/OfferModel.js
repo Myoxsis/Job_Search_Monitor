@@ -44,10 +44,10 @@ function add_to_db(x) {
                 //console.log('Not Added : Already exists in database');
             }
             else {
-                if (x.name.toLowerCase().search(/(stage|alternance|stagiaire|apprenti|apprentissage|internship|these|thesis|intern|stg)/g) > -1){
+                if (x.name.toLowerCase().search(/(stage|alternance|stagiaire|apprenti|apprentissage|internship|these|thesis|intern|stg|alternant)/g) > -1){
                     //console.log("Not Added : Stage or Alternance");
                 }
-                else if (x.details.toLowerCase().search(/(stage|alternance|stagiaire|apprenti|apprentissage|internship|these|thesis|intern|stg)/g) > -1){
+                else if (x.details.toLowerCase().search(/(stage|alternance|stagiaire|apprenti|apprentissage|internship|these|thesis|intern|stg|alternant)/g) > -1){
                     //console.log("Not Added : Stage or Alternance");
                 }
                else { 

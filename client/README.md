@@ -10,6 +10,7 @@
     13/02/2021 : Search Function implemented on the name of the offer and the company. The logo of the company is displayed instead of the  raw name. But some logo are not implemented yet.
         Logo to add :
             - Vacheron Constantin
+            - Chloé
             - Air France
             - Richemont
             - Cartier
