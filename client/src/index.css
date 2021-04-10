@@ -160,6 +160,34 @@ body {
   width: calc(100% - 50px);
 }
 
+#nav_list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+#nav_list li{
+  float: left;
+  display: block;
+  color: rgb(165, 145, 145);
+  text-align: center;
+  text-decoration: none;
+  padding: 14px 16px;
+}
+
+a.active > li  {
+  /*border-top: lightblue 3px solid;*/
+  box-shadow: 0 4px 0 rgb(120, 196, 231) inset;
+  background-color: rgb(245, 252, 255);
+}
+
+.nav_link {
+  text-decoration: none;
+}
+
+
 button {
   background-color: aliceblue; /* Green */
   border: none;

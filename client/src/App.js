@@ -16,7 +16,7 @@ const App = () => {
     <div className="App">
       <Clock />
       <header className="App-header">
-        <h2>Job Monitoring</h2>
+        <h2>Aurora</h2>
 
         <Router>
           <Navigation />

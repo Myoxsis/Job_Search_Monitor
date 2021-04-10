@@ -4,7 +4,6 @@ const { colors } = require("prompt");
 const idx = require("./OfferModel");
 const ora = require('ora');
 
-
 async function scrapTotal() {
     const page_url = 'https://krb-sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=30080&siteid=6559#home';
     const { data } = await axios.get(page_url);
@@ -16,7 +15,7 @@ async function scrapTotal() {
         const $element = $(element);
         const offers = {};
         //offers.name = $element.find($('a.jobtitle')).text().replace(/\s\s+/g, ' ').trim();
-        console.log($element);
+        console.log($element.children());
         //offers.link = ("https://jobs.groupe-psa.com" + $element.find($('a.ts-offer-list-item__title-link')).attr('href'));
         //offers.company = "PSA";
         //offers.function = "";
