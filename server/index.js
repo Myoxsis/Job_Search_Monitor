@@ -10,6 +10,7 @@ const middlewares = require('./middlewares');
 const idx = require("./OfferModel");
 
 const sequelize = new Sequelize('postgres://maxime_alain:www.myoxsis.com@localhost:5432/job_monitor');
+const last_update = "";
 
 sequelize
     .authenticate()
@@ -64,6 +65,38 @@ app.get('/offers/today', async (req, res) => {
     catch(error) {
         console.error(error);
     }
+}); 
+
+app.get('/offers/last', async (req, res) => {
+
+    // SELECT "id", "name", "link", "company", "function", "details", "desc", "createdAt", "updatedAt" 
+    // FROM "offers" AS "offer" 
+    // WHERE "offer"."createdAt" BETWEEN 'START_DAY' AND 'NOW'
+
+    
+    const NOW = new Date();
+    try {
+        const offer = await idx.getTodayOffers(last_update, NOW);
+        res.json(offer);
+    }
+    catch(error) {
+        console.error(error);
+    }
+
+    console.log("Hello Worlds");
+}); 
+
+app.get('/offers/last_update_time', async (req, res) => {
+
+    try {
+        const offer = await idx.getUpdateDateArray();
+        res.json(offer[Object.keys(offer)[0]].dataValues);
+        const last_update = offer[Object.keys(offer)[0]].dataValues;
+    }
+    catch(error) {
+        console.error(error);
+    }
+
 }); 
 
 app.use(middlewares.notFound);

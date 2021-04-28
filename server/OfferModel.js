@@ -75,9 +75,14 @@ function getTodayOffers(day, now) {
     return today_offer;
 }
 
+function getUpdateDateArray(day, now) {
+    today_offer = Offer.findAll({attributes: ['createdAt'], order:[['createdAt', 'DESC']]});
+    return today_offer;
+}
+
 
 
 // the defined model is the class itself
 //console.log(Offer === sequelize.models.offer);
 
-module.exports = { createOffer, isIdUnique, resetDatabase, add_to_db, getDB, getTodayOffers };
+module.exports = { createOffer, isIdUnique, resetDatabase, add_to_db, getDB, getTodayOffers, getUpdateDateArray };

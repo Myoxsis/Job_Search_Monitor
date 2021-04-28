@@ -128,22 +128,26 @@ const OfferBox = ({offers, loading}) => {
 
     return (
         <div className='divOffer'>
+
+<tr id="first_row">
+            <th style={{width: "15%"}}>Company</th>
+            <th style={{width: "25%"}}>Description</th>
+            <th style={{width: "15%"}}>Lien</th>
+            <th style={{width: "10%"}}>Seen</th>
+            <th style={{width: "10%"}}>Like</th>
+            </tr>
+
             {offers.map(offer => (
-                <div className="offerBox" key={offer.id}>
-                <div className="offerItem">
-                    <div className="offerCompany">
-                    <div className="offerCompanyImg">{displayCompanyLogo(offer.company)}</div>
-                    </div>
-                    <div className="offerDescription">
-                    <div className="offerName">{cleanDesc(offer.name)} </div>
-                    <div className="offerLink"><a href={offer.link} target="_blank">Lien</a></div>
-                    </div>
-                    <div className="buttonContainer">
-                    <button className="xButton">✔️</button>
-                    <button className="ackButton">🖤</button>
-                    </div>
-                </div>
-                </div>
+                <tr className="offer_Box" key={offer.id} style={{height: "75px", boxShadow: "0 1px 0 rgb(120, 196, 231) inset"}}>
+                        <td className="offerCompany">
+                        <div className="offerCompanyImg">{displayCompanyLogo(offer.company)}</div>
+                        </td>
+                        <td className="offerName">{cleanDesc(offer.name)} </td>
+                        <td className="offerLink"><a href={offer.link} target="_blank">Details</a></td>                    
+                        <td><button className="xButton">✔️</button></td>
+                        <td><button className="ackButton">🖤</button></td>
+                        
+                </tr>
             ))}
         </div>
     );

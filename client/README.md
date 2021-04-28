@@ -15,3 +15,5 @@
             - Richemont
             - Cartier
             - Watchfinder
+    10/04/2021 : Add logo : 
+            - Alaïa
