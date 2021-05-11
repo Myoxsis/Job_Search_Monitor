@@ -26,3 +26,35 @@ const puppeteer = require('puppeteer');
   await browser.close();
 
 })();
+
+
+
+const puppeteer = require('puppeteer');
+
+// This is where we'll put the code to get around the tests.
+const preparePageForTests = async (page) => {
+
+  // Pass the User-Agent Test.
+  const userAgent = 'Mozilla/5.0 (X11; Linux x86_64)' +
+    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36';
+  await page.setUserAgent(userAgent);
+  }
+  
+
+(async () => {
+    const browser = await puppeteer.launch(); //{ headless: true }
+    const page = await browser.newPage();
+    await preparePageForTests(page);
+
+await page.goto('https://arianegroup.wd3.myworkdayjobs.com/EXTERNALALL');
+
+await page.waitForSelector('.WB5F');
+
+const textContent = await page.evaluate(() => {
+   return document.querySelector('.WB5F');
+});
+
+console.log(textContent); 
+
+//browser.close();
+})();

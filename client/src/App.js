@@ -16,7 +16,7 @@ const App = () => {
     <div className="App">
       <Clock />
       <header className="App-header">
-        <h2>Aurora</h2>
+        <h2 style={{textAlign: "center"}}>Aurora</h2>
 
         <Router>
           <Navigation />

@@ -54,10 +54,9 @@ const Index = () => {
           <input type='text' value={q} onChange={(e) => setQ(e.target.value)} className="searchBar" placeholder='Search ...'></input>
         </div>
 
-        <table id="Table">
+
             <OfferBox offers={offersToDisplay} loading={loading} />  
-        </table>
-        
+
     
         <Pagination 
          offersPerPage={offersPerPage}

@@ -129,7 +129,7 @@ const OfferBox = ({offers, loading}) => {
     return (
         <div className='divOffer'>
 
-<tr id="first_row">
+<tr id="first_row" style={{height: "75px", verticalAlign: "middle"}}>
             <th style={{width: "15%"}}>Company</th>
             <th style={{width: "25%"}}>Description</th>
             <th style={{width: "15%"}}>Lien</th>
@@ -140,7 +140,7 @@ const OfferBox = ({offers, loading}) => {
             {offers.map(offer => (
                 <tr className="offer_Box" key={offer.id} style={{height: "75px", boxShadow: "0 1px 0 rgb(120, 196, 231) inset"}}>
                         <td className="offerCompany">
-                        <div className="offerCompanyImg">{displayCompanyLogo(offer.company)}</div>
+                        <div className="offerCompanyImg" style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{displayCompanyLogo(offer.company)}</div>
                         </td>
                         <td className="offerName">{cleanDesc(offer.name)} </td>
                         <td className="offerLink"><a href={offer.link} target="_blank">Details</a></td>                    
