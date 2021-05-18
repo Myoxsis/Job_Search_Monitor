@@ -1,47 +1,73 @@
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer');
+//const { values } = require('sequelize/types/lib/operators');
 
 // This is where we'll put the code to get around the tests.
-const preparePageForTests = async (page) => {
 
-  // Pass the User-Agent Test.
-  const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15';
-  await page.setUserAgent(userAgent);
-  }
-
-const getData = async () => {
-  // 1 - Créer une instance de navigateur
-  const browser = await puppeteer.launch({ headless: false });
+const getDataArianeGroup = async () => {
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  //await preparePageForTests(page);
-
-  // 2 - Naviguer jusqu'à l'URL cible
   await page.goto('https://arianegroup.wd3.myworkdayjobs.com/EXTERNALALL')
-  await page.waitForSelector(".WB5F") // fait une pause d'une seconde
-  await page.screenshot({ path: "./screenshot.jpg", type: "jpeg", fullPage: true });
-
-  // 3 - Récupérer les données
-  const result = await page.evaluate(() => {
-    
-    var title = Array.from(document.querySelectorAll('.WB5F'));
-    //let location = document.querySelectorAll('.jobProperty.position3').innerText
-    //return { title } //, location
-    return title
-  })
-
+  await page.waitForSelector(".WB5F")
   const links = await page.evaluate(function getUrls() {
     return Array.from(document.querySelectorAll('.WB5F').values()).
-      map(el => el.innerHTML);
+      map(el => el.innerText);
   });
-
-  // 4 - Retourner les données (et fermer le navigateur)
   browser.close()
-  return {result, links}
-  //console.log(result)
+  return {links}
 }
 
+const getDataKering = async () => {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto('https://kering.wd3.myworkdayjobs.com/fr-FR/Kering')
+  await page.waitForSelector(".WB5F")
+  const links = await page.evaluate(function getUrls() {
+    return Array.from(document.querySelectorAll('.WB5F').values()).
+      map(el => el.innerText);
+  });
+  browser.close()
+  return {links}
+}
 
+const getDataChanel = async () => {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto('https://cc.wd3.myworkdayjobs.com/en-US/ChanelCareers')
+  await page.waitForSelector(".WB5F")
+  const links = await page.evaluate(function getUrls() {
+    return Array.from(document.querySelectorAll('.WB5F').values()).
+      map(el => el.innerText);
+  });
+  browser.close()
+  return {links}
+}
+
+const getDataPernodRicard = async () => {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto('https://pernodricard.wd3.myworkdayjobs.com/fr-FR/pernod-ricard')
+  await page.waitForSelector(".WB5F")
+  const links = await page.evaluate(function getUrls() {
+    return Array.from(document.querySelectorAll('.WIWY').values()).
+      map(el => el.innerText);
+  });
+  browser.close()
+  return {links}
+}
 
 // Appelle la fonction getData() et affichage les données retournées
-getData().then(value => {
+
+getDataArianeGroup().then(value => {
   console.log(value)
 })
+getDataKering().then(value => {
+  console.log(value)
+})
+getDataChanel().then(value => {
+  console.log(value)
+})
+getDataPernodRicard().then(value => {
+  console.log(value)
+})
+
+//https://imerys.wd3.myworkdayjobs.com/en-US/IMERYS-Careers?source=Linkedin
