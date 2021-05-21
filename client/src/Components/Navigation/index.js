@@ -13,6 +13,10 @@ export default class Navigation extends React.Component {
                 <NavLink exact activeClassName="active" className="nav_link" to="/Today">
                     <li>Offres du Jour</li>
                 </NavLink>
+
+                <NavLink exact activeClassName="active" className="nav_link" to="/Evaluate">
+                    <li>Evaluate Offers</li>
+                </NavLink>
                 </ul>    
             </div>
         );

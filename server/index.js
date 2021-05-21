@@ -37,6 +37,19 @@ app.get('/', (req, res) => {
     }); 
 });
 
+app.get('/offer/:x', async (req, res) => {
+
+    // SELECT "id", "name", "link", "company", "function", "details", "desc", "createdAt", "updatedAt" 
+    // FROM "offers" AS "offer"
+
+    try {
+        const offer = await idx.getOffer(req.params.x);
+        res.json(offer);
+    } catch (error) {
+        res.json(error);
+    }
+});
+
 app.get('/offers', async (req, res) => {
 
     // SELECT "id", "name", "link", "company", "function", "details", "desc", "createdAt", "updatedAt" 

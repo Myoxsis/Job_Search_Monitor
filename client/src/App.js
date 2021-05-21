@@ -8,6 +8,7 @@ import Navigation from "./Components/Navigation";
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Index from "./Pages/index";
 import TodayOffer from "./Pages/today_offers";
+import Evaluate from "./Pages/Evaluate";
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/!#" exact component={Index} />
           <Route path="/Today" exact component={TodayOffer} />
           <Route path="/Today/!#" exact component={TodayOffer} />
+          <Route path="/Evaluate" exact component={Evaluate} />
 
         </Router>
     

@@ -218,3 +218,45 @@ button {
 .offer_Box {
   
 }
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+
+.box {
+	top: 1%;
+	margin-left : 10%;
+	margin-right: 10%;
+	box-shadow: 1px 1px 12px #555;
+}
+
+.job-title {
+	padding: 1%;
+	text-align: center;
+	font-weight: bold;
+}
+
+.job-company {
+	padding: 1%;
+	font-weight: bold;
+	color: darkblue;
+}
+
+.job-description {
+	padding: 1%;
+}
+
+.metrics-container {
+  margin-top: 5%;
+}
+
+.metrics-item {
+  display: inline-block;
+  font-size: 14px;
+  color: black;
+}
