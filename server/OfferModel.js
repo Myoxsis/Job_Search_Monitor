@@ -11,7 +11,8 @@ Offer.init({
     company: { type: DataTypes.STRING, },
     function: { type: DataTypes.STRING, },
     details: { type: DataTypes.TEXT, },
-    desc: {type: DataTypes.TEXT, allowNull : true }
+    desc: {type: DataTypes.TEXT, allowNull : true },
+    grade: {type: DataTypes.TEXT, allowNull : true }
     }, {
     sequelize,
     timestamps: true,
@@ -20,7 +21,7 @@ Offer.init({
 
 function createOffer(x) {
     Offer.create({ name: x.name, link: x.link, company: x.company,
-        function: x.function, details: x.details, desc: x.desc,
+        function: x.function, details: x.details, desc: x.desc, grade: "0",
     }).then( offer => {
     console.log("Offer Generate ID", offer.id);
     });
