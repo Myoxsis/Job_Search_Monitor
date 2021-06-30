@@ -1,4 +1,7 @@
 import React from "react";
+import StarRating from '../StarRating';
+
+
 import safranLogo from './img/safran.png';
 import lvmhLogo from './img/lvmh.png';
 import dassaultAviationLogo from './img/dassaultAviation.png';
@@ -129,10 +132,11 @@ const OfferBox = ({offers, loading}) => {
     return (
         <div className='divOffer'>
 
-<tr id="first_row" style={{height: "75px", verticalAlign: "middle"}}>
+            <tr id="first_row" style={{height: "75px", verticalAlign: "middle"}}>
             <th style={{width: "15%"}}>Company</th>
             <th style={{width: "25%"}}>Description</th>
             <th style={{width: "15%"}}>Lien</th>
+            <th style={{width: "5%"}}>Mark</th>
             <th style={{width: "10%"}}>Seen</th>
             <th style={{width: "10%"}}>Like</th>
             </tr>
@@ -143,7 +147,8 @@ const OfferBox = ({offers, loading}) => {
                         <div className="offerCompanyImg" style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{displayCompanyLogo(offer.company)}</div>
                         </td>
                         <td className="offerName">{cleanDesc(offer.name)} </td>
-                        <td className="offerLink"><a href={offer.link} target="_blank">Details</a></td>                    
+                        <td className="offerLink"><a href={offer.link} target="_blank" rel="noreferrer">Details</a></td>   
+                        <td> <StarRating value={offer.grade} /> </td>                 
                         <td><button className="xButton">✔️</button></td>
                         <td><button className="ackButton">🖤</button></td>
                         

@@ -63,6 +63,19 @@ app.get('/offers', async (req, res) => {
     }
 });
 
+app.get('/ToEvaluate', async (req, res) => {
+
+    // SELECT "id", "name", "link", "company", "function", "details", "desc", "createdAt", "updatedAt" 
+    // FROM "offers" AS "offer"
+
+    try {
+        const offer = await idx.getNonEvaluated();
+        res.json(offer);
+    } catch (error) {
+        res.json(error);
+    }
+});
+
 app.get('/offers/today', async (req, res) => {
 
     // SELECT "id", "name", "link", "company", "function", "details", "desc", "createdAt", "updatedAt" 

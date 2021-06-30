@@ -7,9 +7,9 @@ const getDataTotal = async () => {
   await page.waitForSelector(".job")
   const links = await page.evaluate(function getUrls() {
     return Array.from(document.querySelectorAll('.job').values()).
-    //  map(el => el.querySelector('.jobtitle').innerText);
-      map(el => el.querySelector('href'));
-    //  map(el => el.innerText);
+      map(el => el.querySelector('.jobtitle').innerHTML);
+     //map(el => el.querySelectorAll('href'));
+     // map(el => el.innerText);
   });
   browser.close()
   return {links}

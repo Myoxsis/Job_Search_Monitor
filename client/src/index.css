@@ -260,3 +260,8 @@ button {
   font-size: 14px;
   color: black;
 }
+
+.star {
+  color: #ff9933;
+  cursor: pointer;
+}

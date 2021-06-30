@@ -53,16 +53,12 @@ const Index = () => {
         <div>
           <input type='text' value={q} onChange={(e) => setQ(e.target.value)} className="searchBar" placeholder='Search ...'></input>
         </div>
+        
+        <OfferBox offers={offersToDisplay} loading={loading} />  
 
-
-            <OfferBox offers={offersToDisplay} loading={loading} />  
-
-    
         <Pagination 
-         offersPerPage={offersPerPage}
-         totalOffers={currentOffers.length}
-         paginate={paginate}
-         currentPage={currentPage} />
+         offersPerPage={offersPerPage} totalOffers={currentOffers.length}
+         paginate={paginate} currentPage={currentPage} />
     </div>
   );
 }

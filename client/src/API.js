@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const API_URL = 'http://localhost:1337';
+const API_URL = 'http://localhost:1338';
 
 async function listAllOffers() {
     const response = await fetch(`${API_URL}/offers`);

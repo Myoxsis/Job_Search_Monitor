@@ -71,13 +71,18 @@ function getOffer(x) {
     return offer
 }
 
+function getNonEvaluated(x) {
+    const offer = Offer.findAll({where: {grade: "0"}});
+    return offer
+}
+
 function getDB() {
-    const offers = Offer.findAll({attributes: ['id', 'name', 'link', 'company'], order:[['id', 'DESC']]});
+    const offers = Offer.findAll({attributes: ['id', 'name', 'link', 'company'], order:[['grade', 'DESC']]});
     return offers;
 }
 
 function getTodayOffers(day, now) {
-    today_offer = Offer.findAll({ where: { createdAt: { [Op.between]: [day, now] },}});
+    today_offer = Offer.findAll({ where: { createdAt: { [Op.between]: [day, now] }, }, order:[['grade', 'DESC']]});
     return today_offer;
 }
 
@@ -91,4 +96,5 @@ function getUpdateDateArray(day, now) {
 // the defined model is the class itself
 //console.log(Offer === sequelize.models.offer);
 
-module.exports = { createOffer, isIdUnique, resetDatabase, add_to_db, getDB, getTodayOffers, getUpdateDateArray, getOffer };
+module.exports = { createOffer, isIdUnique, resetDatabase, add_to_db, getDB, getTodayOffers, getUpdateDateArray, getOffer,
+                    getNonEvaluated };

@@ -58,7 +58,8 @@ const getDataPernodRicard = async () => {
 // Appelle la fonction getData() et affichage les données retournées
 
 getDataArianeGroup().then(value => {
-  console.log(value)
+  const head_offer = value.split('|')[0];
+  console.log(head_offer)
 })
 getDataKering().then(value => {
   console.log(value)
