@@ -13,17 +13,20 @@
     [] Create a component for the job offer display
     [] Build the front-end
         [x] React App
-        [] If hot&skilled, electron app
+        [x] If hot&skilled, electron app
     [] Add notification system
+
+    
+
+## Notes
+    Updating ...
 
     [] Daher not working / Complex hierarchy and automated page
     [] Add Engie Scrap // Not working yet
 
-## Notes
-    28/12/2020 : Update of all MDs of the project.
-    14/01/2021 : Added the folder offer/todat for the offer of the day. But some work is needed on the timestamps. (Not 100% accurate yet)
-    03/02/2021 : Added Airbus Scrapper.
-    09/02/2021 : Added new scrappers : SMCP, PSA. Started Sodern Scrapper, missing the Desc field extract. 
+    Workday : 
+    It's possible to scrap job description but no link is available
+
     
 ## Site TBD
     https://www.airliquide.com/fr/carrieres/offres-emploi #not working yet
@@ -38,16 +41,23 @@
     https://renault.referrals.selectminds.com/
     https://hris-suez.csod.com/ats/careersite/search.aspx?site=8&c=hris-suez&sid=%5e%5e%5eHJe5gko1mldbDMyZ8oI9Lw%3d%3d
     https://careers.hr.technipfmc.com
-    https://krb-sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=30080&siteid=6559#home #Total : Not working no hardcoded html
     https://career012.successfactors.eu/career?company=VALLOUREC&site=VjItcmY2YVFFcnJMYWhIb3RmMzhTYU9Ldz09
     https://emplois.vinci.com/recherche-d%27offres
     https://www.nestle.fr/jobs/search-jobs?keyword=&country=FR&location=&career_area=All&company=All
     https://careers.faurecia.com/search/?createNewAlert=false&q=&locationsearch=france&optionsFacetsDD_customfield3=&optionsFacetsDD_country=&optionsFacetsDD_shifttype=Unlimited
     https://www.emploi.sncf.com/nos-offres/contrat/577-578/localisation/40629/
-
+    https://www.imerys.com/talent/jobs?locationCountry=France
 
     Workday Website :
     https://cc.wd3.myworkdayjobs.com/fr-FR/ChanelCareers
     https://kering.wd3.myworkdayjobs.com/fr-FR/Kering?source=LinkedIn_Slots
     https://pfizer.wd1.myworkdayjobs.com/PfizerCareers/5/refreshFacet/318c8bb6f553100021d223d9780d30be
     https://pernodricard.wd3.myworkdayjobs.com/fr-FR/pernod-ricard
+
+## Changelog
+	25/08/2021 : Reviewing the way of work while scrap (avoid scrapping link already in database) -> WIP
+	20/08/2021 : Adding TotalEnergies Scrap
+	09/02/2021 : Added new scrappers : SMCP, PSA. Started Sodern Scrapper, missing the Desc field extract. 
+	03/02/2021 : Added Airbus Scrapper.
+	14/01/2021 : Added the folder offer/todat for the offer of the day. But some work is needed on the timestamps. (Not 100% accurate yet)
+	28/12/2020 : Update of all MDs of the project.

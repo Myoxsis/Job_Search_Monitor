@@ -91,10 +91,15 @@ function getUpdateDateArray(day, now) {
     return today_offer;
 }
 
+function getLinksList() {
+    const offers = Offer.findAll({attributes: ['link']});
+    return offers;
+}
+
 
 
 // the defined model is the class itself
 //console.log(Offer === sequelize.models.offer);
 
 module.exports = { createOffer, isIdUnique, resetDatabase, add_to_db, getDB, getTodayOffers, getUpdateDateArray, getOffer,
-                    getNonEvaluated };
+                    getNonEvaluated, getLinksList };
