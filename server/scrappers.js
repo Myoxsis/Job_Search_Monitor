@@ -859,6 +859,74 @@ async function scrapTotal() {
     spinner.succeed();
 };
 
+async function scrapImerys() {
+    const page_url = 'https://www.imerys.com/talent/jobs?locationCountry=France'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+    var list_offers = [];
+
+    $('.documents-list__item').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find($('.documents-list__item__content')).find('a').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = $element.find($('.documents-list__item__content')).find('a').attr('href');
+        offers.company = 'Imerys';
+        offers.function = '';
+        offers.details = $element.find($('.documents-list__item__content__type')).text().replace(/\s\s+/g, ' ').trim();
+
+        list_offers.push(offers);
+    });
+    const spinner = ora('Scrapping Imerys\n');
+    spinner.start();
+    for (var i = 0; i < list_offers.length; i++) {
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const html = cheerio.load(data);
+            list_offers[i].desc = html('.rte').text().replace(/\s\s+/g, ' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
+    console.log(list_offers);
+};
+
+async function scrapTechnip() {
+    const page_url = 'https://technip.referrals.selectminds.com/technipfmc/jobs/search/7535477'
+    const { data } = await axios.get(page_url);
+    const $ = cheerio.load(data);
+    var list_offers = [];
+
+    $('.job_list_row').each((i, element) => {
+        const $element = $(element);
+        const offers = {};
+        offers.name = $element.find($('.jlr_title p')).find('a').text().replace(/\s\s+/g, ' ').trim();
+        offers.link = $element.find($('.jlr_title p')).find('a').attr('href');
+        offers.company = 'TechnipFMC';
+        offers.function = $element.find($('.jlr_company')).text();
+        offers.details = $element.find('.jlr_cat_loc').map((i, el) => {
+            return $(el).text();
+          }).get().join(' /*/ ').replace(/\s\s+/g, ' ').trim();
+
+        list_offers.push(offers);
+    });
+    const spinner = ora('Scrapping TechnipFMC\n');
+    spinner.start();
+    for (var i = 0; i < list_offers.length; i++) {
+        try{
+            const { data } = await axios.get(list_offers[i].link);
+            const html = cheerio.load(data);
+            list_offers[i].desc = html('.job_description').text().replace(/\s\s+/g, ' ').trim();
+            idx.add_to_db(list_offers[i]);
+        } catch(e) {
+            console.log(e.message);
+        }
+    };
+    spinner.succeed();
+    console.log(list_offers);
+};
+
 
 //idx.resetDatabase();
 function scrapAll() {
@@ -887,6 +955,8 @@ function scrapAll() {
     scrapAirbus();
     scrapSMCP();
     scrapPSA();
+    scrapImerys();
+    scrapTechnip();
 };
 
 
@@ -899,35 +969,23 @@ https://cc.wd3.myworkdayjobs.com/fr-FR/ChanelCareers
 https://jobs.danone.com/search/?createNewAlert=false&q=&locationsearch=&optionsFacetsDD_country=FR&optionsFacetsDD_facility=&optionsFacetsDD_department=Experienced+professionals
 https://careers.3ds.com/jobs?woc=%7B%22country%22%3A%5B%22country%2Ffrance%22%5D%7D&wocset=6
 http://careers.disneylandparis.com/en/management-business/supply-chain-procurement
-https://www.edf.fr/edf-recrute
 https://www.place-emploi-public.gouv.fr
 https://jobs.gecareers.com/global/en/search-results
 https://www.invivo-group.com/fr/nos-offres
 https://kering.wd3.myworkdayjobs.com/fr-FR/Kering?source=LinkedIn_Slots
-https://careers.loreal.com/en_US/jobs/SearchJobs/
-https://www.lisi-aerospace.com/en/join-us/careers/
 https://www.lvmh.fr/talents/nous-rejoindre/nos-offres/liste-des-offres/?job=&place=&experience=&activity=&contract=&reference=#gt_offers-results
-https://www.mbda-systems.com/jobs/?gestmax%5Bvac_sector%5D=&gestmax%5Bvac_localisation%5D=001&gestmax%5Bvac_job_type%5D=
 https://jobs.moncler.com/search/?createNewAlert=false&q=&locationsearch=
-https://motul-recrute.talent-soft.com/job/list-of-jobs.aspx
-https://www.naval-group.com/fr/nous-rejoindre-85?keywords=&offerFamilyCategory=&contractType=&country=&city=&op=Rechercher&form_build_id=form-NzrJ7AsvKwvEKPwLDA2P5Qu6e3T6EKUpkTDoHGZS6Is&form_id=talent_soft_offers_filters_form#offer-list-content
-https://nexter-recrutement.profils.org/accueil.aspx?LCID=1036
 https://orange.jobs/jobs/search.do?keyword=
 https://pernodricard.wd3.myworkdayjobs.com/fr-FR/pernod-ricard
-https://jobs.groupe-psa.com/offre-de-emploi/liste-offres.aspx?mode=layer&lcid=1036&facet_JobDescription_Contract=577
 https://renault.referrals.selectminds.com/
-https://joinus.saint-gobain.com/fr
 https://www.sodern.com/website/fr/ref/Carrières_262.html
 https://hris-suez.csod.com/ats/careersite/search.aspx?site=8&c=hris-suez&sid=%5e%5e%5eHJe5gko1mldbDMyZ8oI9Lw%3d%3d
 https://careers.hr.technipfmc.com
-https://krb-sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=30080&siteid=6559#home
 https://career012.successfactors.eu/career?company=VALLOUREC&site=VjItcmY2YVFFcnJMYWhIb3RmMzhTYU9Ldz09
 https://emplois.vinci.com/recherche-d%27offres
 https://www.nestle.fr/jobs/search-jobs?keyword=&country=FR&location=&career_area=All&company=All
-https://www.smcp.com/fr/talents/offres-d-emploi/?keywords=&geographicalLocation=22&offerCountry=79&offerRegion=&organisation=&offerFamilyCategory=&contractType=&experienceLevel=
 https://pfizer.wd1.myworkdayjobs.com/PfizerCareers/5/refreshFacet/318c8bb6f553100021d223d9780d30be
 https://careers.faurecia.com/search/?createNewAlert=false&q=&locationsearch=france&optionsFacetsDD_customfield3=&optionsFacetsDD_country=&optionsFacetsDD_shifttype=Unlimited
 https://www.emploi.sncf.com/nos-offres/contrat/577-578/localisation/40629/
-https://careers.ratpdev.com/offre-de-emploi/liste-offres.aspx?page=3&LCID=1036
 https://arianegroup.wd3.myworkdayjobs.com/EXTERNALALL
 */

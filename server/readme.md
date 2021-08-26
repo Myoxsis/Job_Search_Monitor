@@ -21,7 +21,6 @@
 ## Notes
     Updating ...
 
-    [] Daher not working / Complex hierarchy and automated page
     [] Add Engie Scrap // Not working yet
 
     Workday : 
@@ -55,6 +54,7 @@
     https://pernodricard.wd3.myworkdayjobs.com/fr-FR/pernod-ricard
 
 ## Changelog
+	26/08/2021 : Adding Imerys and TechnipFMC Scrap.
 	25/08/2021 : Reviewing the way of work while scrap (avoid scrapping link already in database) -> WIP
 	20/08/2021 : Adding TotalEnergies Scrap
 	09/02/2021 : Added new scrappers : SMCP, PSA. Started Sodern Scrapper, missing the Desc field extract. 
