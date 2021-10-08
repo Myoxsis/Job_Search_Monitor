@@ -889,7 +889,6 @@ async function scrapImerys() {
         }
     };
     spinner.succeed();
-    console.log(list_offers);
 };
 
 async function scrapTechnip() {
@@ -924,7 +923,6 @@ async function scrapTechnip() {
         }
     };
     spinner.succeed();
-    console.log(list_offers);
 };
 
 
