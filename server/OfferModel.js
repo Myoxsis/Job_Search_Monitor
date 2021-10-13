@@ -12,7 +12,8 @@ Offer.init({
     function: { type: DataTypes.STRING, },
     details: { type: DataTypes.TEXT, },
     desc: {type: DataTypes.TEXT, allowNull : true },
-    grade: {type: DataTypes.TEXT, allowNull : true }
+    grade: {type: DataTypes.TEXT, allowNull : true },
+    tags: {type: DataTypes.TEXT, allowNull : true }
     }, {
     sequelize,
     timestamps: true,
@@ -21,7 +22,7 @@ Offer.init({
 
 function createOffer(x) {
     Offer.create({ name: x.name, link: x.link, company: x.company,
-        function: x.function, details: x.details, desc: x.desc, grade: "0",
+        function: x.function, details: x.details, desc: x.desc, grade: "0", tags: "",
     }).then( offer => {
     console.log("Offer Generate ID", offer.id);
     });
@@ -77,7 +78,7 @@ function getNonEvaluated(x) {
 }
 
 function getDB() {
-    const offers = Offer.findAll({attributes: ['id', 'name', 'link', 'company'], order:[['grade', 'DESC']]});
+    const offers = Offer.findAll({attributes: ['id', 'name', 'link', 'company', 'grade'], order:[['grade', 'DESC']]});
     return offers;
 }
 

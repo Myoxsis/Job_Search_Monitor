@@ -159,8 +159,3 @@ const OfferBox = ({offers, loading}) => {
 };
 
 export default OfferBox;
-
-/*
-
-
-*/

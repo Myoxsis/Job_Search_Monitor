@@ -11,7 +11,11 @@ const Star = ({ marked, starId }) => {
   const StarRating = ({ value }) => {
     const [rating, setRating] = React.useState(parseInt(value) || 0);
     const [selection, setSelection] = React.useState(0);
-  
+    
+    const sendData = () => {
+      this.props.offerRating(rating);
+    }
+
     const hoverOver = event => {
       let val = 0;
       if (event && event.target && event.target.getAttribute('data-star-id'))
@@ -31,6 +35,7 @@ const Star = ({ marked, starId }) => {
             marked={selection ? selection >= i + 1 : rating >= i + 1}
           />
         ))}
+        <p>{rating}</p>
       </div>
     );
   };
